@@ -8,32 +8,37 @@
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Segoe UI, sans-serif; background: #0c1210; color: #eef6f1; }
+    body { margin: 0; font-family: Segoe UI, sans-serif; background: #101820; color: #eef3f8; }
     main { max-width: 420px; margin: 0 auto; padding: 20px 16px 96px; }
     h1 { margin: 8px 0 4px; font-size: 28px; }
-    p.hint { margin: 0 0 16px; color: #8ea399; }
+    p.hint { margin: 0 0 16px; color: #9aafc3; }
+    .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+    .city { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 14px 8px; }
+    .city.on { background: #6cb6ff; color: #071018; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    article { border: 1px solid #2a3832; background: #151c19; border-radius: 16px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; }
+    article { border: 1px solid #2c3e52; background: #182433; border-radius: 16px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; }
     button { cursor: pointer; border: 0; border-radius: 12px; font-weight: 700; }
-    .add, .buy { background: #3ddec0; color: #06241c; }
+    .add, .buy { background: #6cb6ff; color: #071018; }
     .add { margin-top: auto; align-self: flex-end; width: 40px; height: 40px; border-radius: 999px; }
     .buy, .ghost { width: 100%; padding: 14px; margin-top: 12px; }
-    .ghost { background: transparent; color: #eef6f1; border: 1px solid #2a3832; }
-    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 6px; background: #0c1210; border-top: 1px solid #2a3832; padding: 8px; }
-    nav button { background: transparent; color: #8ea399; min-width: 72px; min-height: 44px; }
-    nav button.on { color: #3ddec0; }
+    .ghost { background: transparent; color: #eef3f8; border: 1px solid #2c3e52; }
+    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 6px; background: #101820; border-top: 1px solid #2c3e52; padding: 8px; }
+    nav button { background: transparent; color: #9aafc3; min-width: 72px; min-height: 44px; }
+    nav button.on { color: #6cb6ff; }
     .price { color: #e8b86d; }
     .screen { display: none; }
     .screen.on { display: block; }
-    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2a3832; background: #151c19; color: inherit; }
+    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; }
   </style>
 </head>
 <body>
   <main>
     <strong>ElfaSales</strong>
     <section id="catalog" class="screen on">
-      <h1>Каталог</h1>
-      <p class="hint">Плюс кладёт вкус в корзину. Деньги не списываются.</p>
+      <div class="cities">
+        <button type="button" class="city on" data-city="reutlingen">Reutlingen</button>
+        <button type="button" class="city" data-city="tubingen">Tübingen</button>
+      </div>
       <div class="grid" id="grid"></div>
     </section>
     <section id="cart" class="screen">
@@ -60,24 +65,24 @@
     <button data-tab="admin">Админ</button>
   </nav>
   <script>
-    const products = [
-      { id: "mint", name: "Ice Mint", ml: 60, mg: 3, price: 890 },
-      { id: "mango", name: "Mango Punch", ml: 60, mg: 6, price: 920 },
-      { id: "berry", name: "Strawberry Kiwi", ml: 30, mg: 20, price: 690 },
-      { id: "grape", name: "Grape Ice", ml: 60, mg: 3, price: 910 }
-    ];
+    const products = [];
+    let city = "reutlingen";
     const cart = {};
     const orders = [];
     const rub = (n) => n + " ₽";
 
     function draw() {
-      document.getElementById("grid").innerHTML = products.map((p) => `
+      document.querySelectorAll(".city").forEach((b) => b.classList.toggle("on", b.dataset.city === city));
+      const list = products.filter((p) => p.city === city);
+      document.getElementById("grid").innerHTML = list.length
+        ? list.map((p) => `
         <article>
           <strong>${p.name}</strong>
           <p class="hint">${p.ml} мл · ${p.mg} мг</p>
           <span class="price">${rub(p.price)}</span>
           <button class="add" data-add="${p.id}">+</button>
-        </article>`).join("");
+        </article>`).join("")
+        : "<p class='hint'>В этом городе пока нет товаров.</p>";
       const rows = Object.entries(cart);
       const box = document.getElementById("cartBox");
       if (!rows.length) {
@@ -107,6 +112,11 @@
     }
 
     document.body.addEventListener("click", (e) => {
+      const cityBtn = e.target.closest("[data-city]");
+      if (cityBtn) {
+        city = cityBtn.dataset.city;
+        draw();
+      }
       const add = e.target.closest("[data-add]");
       if (add) {
         cart[add.dataset.add] = (cart[add.dataset.add] || 0) + 1;
@@ -117,15 +127,15 @@
       const fake = e.target.closest("[data-fake]");
       if (fake) document.getElementById("fake").textContent = fake.dataset.fake + ": пока пусто";
     });
-const ADMIN_ID = 7648089072;
-const tg = window.Telegram && window.Telegram.WebApp;
-if (tg) tg.ready();
-const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-const myId = tgUser ? Number(tgUser.id) : 0;
-if (myId !== ADMIN_ID) {
-  const adminBtn = document.querySelector('[data-tab="admin"]');
-  if (adminBtn) adminBtn.remove();
-}
+    const ADMIN_ID = 7648089072;
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) tg.ready();
+    const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+    const myId = tgUser ? Number(tgUser.id) : 0;
+    if (myId !== ADMIN_ID) {
+      const adminBtn = document.querySelector('[data-tab="admin"]');
+      if (adminBtn) adminBtn.remove();
+    }
     draw();
   </script>
 </body>
