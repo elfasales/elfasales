@@ -1,0 +1,8 @@
+{
+  "name": "elfasales-bot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node bot.js"
+  }
+}
