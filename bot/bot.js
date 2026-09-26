@@ -180,6 +180,41 @@ const server = createServer(async (req, res) => {
       send(res, 200, { id });
       return;
     }
+        if (req.method === "PUT" && url.pathname === "/api/products") {
+      if (!isAdmin(req.headers["x-telegram-init"])) {
+        send(res, 403, { error: "Только админ" });
+        return;
+      }
+      const body = await readBody(req);
+      const name = String(body.name || "").trim();
+      const ml = Number(body.ml);
+      const mg = Number(body.mg);
+      const qty = Number(body.qty);
+      if (!body.id || !name || !ml || !Number.isFinite(mg)) {
+        send(res, 400, { error: "Заполни название, крепость и миллилитры" });
+        return;
+      }
+      await readyDb();
+      const current = await pool.query("SELECT photo FROM products WHERE id = $1", [body.id]);
+      const oldPhoto = current.rows[0] ? current.rows[0].photo : "";
+      await pool.query(
+        `UPDATE products SET city=$2, name=$3, mg=$4, ml=$5, description=$6, qty=$7, in_stock=$8, photo=$9, price=$10 WHERE id=$1`,
+        [
+          body.id,
+          body.city === "tubingen" ? "tubingen" : "reutlingen",
+          name,
+          mg,
+          ml,
+          String(body.description || "").trim(),
+          Number.isFinite(qty) ? qty : 0,
+          Boolean(body.inStock),
+          body.photo ? String(body.photo) : oldPhoto,
+          Number(body.price) || 0,
+        ],
+      );
+      send(res, 200, { id: body.id });
+      return;
+    }
     if (req.method === "DELETE" && url.pathname === "/api/products") {
       if (!isAdmin(req.headers["x-telegram-init"])) {
         send(res, 403, { error: "Только админ" });
