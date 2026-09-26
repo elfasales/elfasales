@@ -42,9 +42,14 @@ while (true) {
       const chatId = update.message?.chat?.id;
       if (!chatId || !text.startsWith("/start")) continue;
       await apiCall("sendMessage", {
-        chat_id: chatId,
-        text: "ElfaSales. Магазин открывается кнопкой «Магазин» слева внизу.",
-      });
+  chat_id: chatId,
+  text: "Добро пожаловать!\nОткройте mini-app чтобы оформить заказ!",
+  reply_markup: {
+    inline_keyboard: [[
+      { text: "Открыть магазин", web_app: { url: "https://elfasales.vercel.app" } }
+    ]]
+  }
+});
     }
   } catch (err) {
     console.log("Ошибка:", err instanceof Error ? err.message : err);
