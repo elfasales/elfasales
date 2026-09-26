@@ -111,6 +111,7 @@ async function readyDb() {
       photo TEXT NOT NULL DEFAULT ''
     )
   `);
+  await pool.query("ALTER TABLE products ADD COLUMN IF NOT EXISTS price INT NOT NULL DEFAULT 0");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS orders (
       id TEXT PRIMARY KEY,
@@ -138,7 +139,7 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/products") {
       await readyDb();
       const { rows } = await pool.query(
-        "SELECT id, city, name, mg, ml, description, qty, in_stock, photo FROM products ORDER BY name",
+        "SELECT id, city, name, mg, ml, description, qty, in_stock, photo, price FROM products
       );
       send(res, 200, rows);
       return;
@@ -161,8 +162,8 @@ const server = createServer(async (req, res) => {
       await readyDb();
       const id = randomUUID();
       await pool.query(
-        `INSERT INTO products (id, city, name, mg, ml, description, qty, in_stock, photo)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        `INSERT INTO products (id, city, name, mg, ml, description, qty, in_stock, photo, price)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
         [
           id,
           body.city === "tubingen" ? "tubingen" : "reutlingen",
@@ -173,6 +174,7 @@ const server = createServer(async (req, res) => {
           Number.isFinite(qty) ? qty : 0,
           Boolean(body.inStock),
           String(body.photo || ""),
+          Number(body.price) || 0,
         ],
       );
       send(res, 200, { id });
