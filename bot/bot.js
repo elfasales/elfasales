@@ -139,7 +139,7 @@ const server = createServer(async (req, res) => {
     if (req.method === "GET" && url.pathname === "/api/products") {
       await readyDb();
       const { rows } = await pool.query(
-        "SELECT id, city, name, mg, ml, description, qty, in_stock, photo, price FROM products
+         "SELECT id, city, name, mg, ml, description, qty, in_stock, photo, price FROM products ORDER BY name",
       );
       send(res, 200, rows);
       return;
