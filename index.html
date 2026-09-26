@@ -273,6 +273,25 @@
         await loadProducts();
         draw();
       }
+      const edit = e.target.closest("[data-edit]");
+if (edit) {
+  const p = products.find((x) => x.id === edit.dataset.edit);
+  if (!p) return;
+  editing = p.id;
+  adminCity = p.city;
+  photo = "";
+  document.getElementById("pName").value = p.name;
+  document.getElementById("pMg").value = p.mg;
+  document.getElementById("pMl").value = p.ml;
+  document.getElementById("pPrice").value = p.price;
+  document.getElementById("pText").value = p.description || "";
+  document.getElementById("pQty").value = p.qty;
+  inStock = Boolean(p.in_stock);
+  const stock = document.getElementById("pStock");
+  stock.classList.toggle("on", inStock);
+  stock.textContent = inStock ? "В наличии" : "Нет в наличии";
+  showAdmin("form");
+}
     });
 
     const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
