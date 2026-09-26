@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ElfaSales</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Segoe UI, sans-serif; background: #0c1210; color: #eef6f1; }
+    main { max-width: 420px; margin: 0 auto; padding: 20px 16px 96px; }
+    h1 { margin: 8px 0 4px; font-size: 28px; }
+    p.hint { margin: 0 0 16px; color: #8ea399; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    article { border: 1px solid #2a3832; background: #151c19; border-radius: 16px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; }
+    button { cursor: pointer; border: 0; border-radius: 12px; font-weight: 700; }
+    .add, .buy { background: #3ddec0; color: #06241c; }
+    .add { margin-top: auto; align-self: flex-end; width: 40px; height: 40px; border-radius: 999px; }
+    .buy, .ghost { width: 100%; padding: 14px; margin-top: 12px; }
+    .ghost { background: transparent; color: #eef6f1; border: 1px solid #2a3832; }
+    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 6px; background: #0c1210; border-top: 1px solid #2a3832; padding: 8px; }
+    nav button { background: transparent; color: #8ea399; min-width: 72px; min-height: 44px; }
+    nav button.on { color: #3ddec0; }
+    .price { color: #e8b86d; }
+    .screen { display: none; }
+    .screen.on { display: block; }
+    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2a3832; background: #151c19; color: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <strong>ElfaSales</strong>
+    <section id="catalog" class="screen on">
+      <h1>Каталог</h1>
+      <p class="hint">Плюс кладёт вкус в корзину. Деньги не списываются.</p>
+      <div class="grid" id="grid"></div>
+    </section>
+    <section id="cart" class="screen">
+      <h1>Корзина</h1>
+      <div id="cartBox"></div>
+    </section>
+    <section id="profile" class="screen">
+      <h1>Профиль</h1>
+      <p class="hint" id="orders">Заказов пока нет.</p>
+    </section>
+    <section id="support" class="screen">
+      <h1>Поддержка</h1>
+      <textarea id="msg" placeholder="Вопрос"></textarea>
+      <button class="buy" id="send">Отправить</button>
+      <p class="hint" id="sent"></p>
+    </section>
+    <section id="admin" class="screen">
+      <h1>Админ</h1>
+      <p class="hint">Кнопки-заглушки. Потом закроем эту вкладку только для тебя.</p>
+      <button class="ghost" data-fake="Товар">Товар</button>
+      <button class="ghost" data-fake="Заказы">Заказы</button>
+      <button class="ghost" data-fake="Клиенты">Клиенты</button>
+      <p class="hint" id="fake"></p>
+    </section>
+  </main>
+  <nav>
+    <button class="on" data-tab="catalog">Каталог</button>
+    <button data-tab="cart">Корзина</button>
+    <button data-tab="profile">Профиль</button>
+    <button data-tab="support">Помощь</button>
+    <button data-tab="admin">Админ</button>
+  </nav>
+  <script>
+    const products = [
+      { id: "mint", name: "Ice Mint", ml: 60, mg: 3, price: 890 },
+      { id: "mango", name: "Mango Punch", ml: 60, mg: 6, price: 920 },
+      { id: "berry", name: "Strawberry Kiwi", ml: 30, mg: 20, price: 690 },
+      { id: "grape", name: "Grape Ice", ml: 60, mg: 3, price: 910 }
+    ];
+    const cart = {};
+    const orders = [];
+    const rub = (n) => n + " ₽";
+
+    function draw() {
+      document.getElementById("grid").innerHTML = products.map((p) => `
+        <article>
+          <strong>${p.name}</strong>
+          <p class="hint">${p.ml} мл · ${p.mg} мг</p>
+          <span class="price">${rub(p.price)}</span>
+          <button class="add" data-add="${p.id}">+</button>
+        </article>`).join("");
+      const rows = Object.entries(cart);
+      const box = document.getElementById("cartBox");
+      if (!rows.length) {
+        box.innerHTML = "<p class='hint'>Пусто</p>";
+        return;
+      }
+      let total = 0;
+      box.innerHTML = rows.map(([id, qty]) => {
+        const p = products.find((x) => x.id === id);
+        total += p.price * qty;
+        return `<p>${p.name} × ${qty}</p>`;
+      }).join("") + `<button class="buy" id="buy">Купить · ${rub(total)}</button>`;
+      document.getElementById("buy").onclick = () => {
+        const id = "ES-" + (1042 + orders.length);
+        orders.push(id);
+        for (const k of Object.keys(cart)) delete cart[k];
+        document.getElementById("orders").textContent = "Заказы: " + orders.join(", ");
+        alert("Заказ оформлен: " + id);
+        draw();
+        show("profile");
+      };
+    }
+
+    function show(id) {
+      document.querySelectorAll(".screen").forEach((s) => s.classList.toggle("on", s.id === id));
+      document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.tab === id));
+    }
+
+    document.body.addEventListener("click", (e) => {
+      const add = e.target.closest("[data-add]");
+      if (add) {
+        cart[add.dataset.add] = (cart[add.dataset.add] || 0) + 1;
+        draw();
+      }
+      const tab = e.target.closest("[data-tab]");
+      if (tab) show(tab.dataset.tab);
+      const fake = e.target.closest("[data-fake]");
+      if (fake) document.getElementById("fake").textContent = fake.dataset.fake + ": пока пусто";
+    });
+    document.getElementById("send").onclick = () => {
+      const t = document.getElementById("msg").value.trim();
+      document.getElementById("sent").textContent = t ? "Отправлено (никому, это прототип)" : "Напиши текст";
+      document.getElementById("msg").value = "";
+    };
+    draw();
+  </script>
+</body>
+</html>
