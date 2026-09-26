@@ -1,16 +1,16 @@
 import { readFileSync } from "node:fs";
 
 function loadToken() {
-  if (process.env.BOT_TOKEN && !process.env.BOT_TOKEN.includes("сюда")) {
-    return process.env.BOT_TOKEN.trim();
-  }
+  const id = process.env.BOT_ID && process.env.BOT_ID.trim();
+  const key = process.env.BOT_KEY && process.env.BOT_KEY.trim();
+  if (id && key) return id + ":" + key;
   try {
     const raw = readFileSync(new URL("./.env", import.meta.url), "utf8");
     const line = raw.split(/\r?\n/).find((l) => l.startsWith("BOT_TOKEN="));
     const token = line?.slice("BOT_TOKEN=".length).trim();
     if (token && !token.includes("сюда")) return token;
   } catch {
-    // на сервере файла .env нет, токен берётся из настроек
+    // на сервере файла .env нет
   }
   console.log("Нет токена.");
   process.exit(1);
