@@ -14,25 +14,30 @@
     main { max-width: 420px; margin: 0 auto; padding: 20px 16px 120px; }
     h1 { margin: 8px 0 4px; font-size: 28px; }
     p.hint { margin: 0 0 16px; color: #9aafc3; font-weight: 800; }
-    .brand { font-size: 22px; letter-spacing: 0.02em; }
-    .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
-    .city { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 18px 8px; font-size: 16px; min-height: 58px; }
-    .city.on { background: #6cb6ff; color: #071018; }
+    .brand { font-size: 22px; }
+    .cities, .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .menu { grid-template-columns: 1fr; }
+    .city, .menu button, .plus { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 18px 8px; font-size: 16px; min-height: 58px; }
+    .city.on, .stock.on { background: #6cb6ff; color: #071018; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    article { border: 1px solid #2c3e52; background: #182433; border-radius: 16px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; }
+    article, .shot { border: 1px solid #2c3e52; background: #182433; border-radius: 16px; overflow: hidden; }
+    article { min-height: 180px; display: flex; flex-direction: column; padding: 0; text-align: left; color: inherit; width: 100%; }
+    article img, .shot img { width: 100%; height: 140px; object-fit: cover; background: #243246; display: block; }
+    article strong, .pad { display: block; padding: 10px 12px 12px; }
     button { cursor: pointer; border: 0; border-radius: 16px; font-family: inherit; font-weight: 800; }
-    .add, .buy { background: #6cb6ff; color: #071018; }
-    .add { margin-top: auto; align-self: flex-end; width: 48px; height: 48px; border-radius: 999px; font-size: 24px; }
-    .buy, .ghost { width: 100%; padding: 16px; margin-top: 12px; font-size: 17px; }
-    .ghost { background: transparent; color: #eef3f8; border: 1px solid #2c3e52; }
+    .buy { background: #6cb6ff; color: #071018; width: 100%; padding: 16px; margin-top: 12px; font-size: 17px; }
+    .buy:disabled { background: #2c3e52; color: #9aafc3; }
+    .ghost { background: transparent; color: #eef3f8; border: 1px solid #2c3e52; width: 100%; padding: 14px; margin-top: 8px; }
+    .back { background: transparent; color: #6cb6ff; padding: 0 0 8px; }
     nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 8px; background: #101820; border-top: 1px solid #2c3e52; padding: 10px 8px 14px; }
     nav button { background: #182433; color: #9aafc3; border: 1px solid #2c3e52; width: 78px; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; }
     nav button svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
     nav button.on { color: #071018; background: #6cb6ff; border-color: #6cb6ff; }
-    .price { color: #e8b86d; }
     .screen { display: none; }
     .screen.on { display: block; }
-    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; font-family: inherit; font-weight: 800; }
+    input, select, textarea { width: 100%; margin: 6px 0 10px; padding: 14px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; font-family: inherit; font-weight: 800; font-size: 16px; }
+    .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin: 8px 0; padding: 12px; border: 1px solid #2c3e52; border-radius: 16px; }
+    .plus { font-size: 32px; margin-top: 8px; }
   </style>
 </head>
 <body>
@@ -45,6 +50,10 @@
       </div>
       <div class="grid" id="grid"></div>
     </section>
+    <section id="detail" class="screen">
+      <button class="back" type="button" data-tab="catalog">Назад</button>
+      <div id="detailBox"></div>
+    </section>
     <section id="cart" class="screen">
       <h1>Корзина</h1>
       <div id="cartBox"></div>
@@ -55,11 +64,40 @@
     </section>
     <section id="admin" class="screen">
       <h1>Админ</h1>
-      <p class="hint">Кнопки-заглушки. Потом закроем эту вкладку только для тебя.</p>
-      <button class="ghost" data-fake="Товар">Товар</button>
-      <button class="ghost" data-fake="Заказы">Заказы</button>
-      <button class="ghost" data-fake="Клиенты">Клиенты</button>
-      <p class="hint" id="fake"></p>
+      <div id="adminMenu" class="menu">
+        <button type="button" data-admin="goods">Товары</button>
+        <button type="button" data-admin="orders">Заказы</button>
+        <button type="button" data-admin="clients">Клиенты</button>
+      </div>
+      <div id="adminGoods" class="screen">
+        <button class="back" type="button" data-admin="menu">Назад</button>
+        <div class="cities">
+          <button type="button" class="city on" data-admin-city="reutlingen">Reutlingen</button>
+          <button type="button" class="city" data-admin-city="tubingen">Tübingen</button>
+        </div>
+        <div id="adminList"></div>
+        <button class="plus" type="button" id="openForm">+</button>
+      </div>
+      <div id="adminForm" class="screen">
+        <button class="back" type="button" data-admin="goods">Назад</button>
+        <input id="pPhoto" type="file" accept="image/*" />
+        <input id="pName" placeholder="Название" />
+        <input id="pMg" type="number" placeholder="Крепость, мг" />
+        <input id="pMl" type="number" placeholder="Миллилитры" />
+        <textarea id="pText" placeholder="Описание"></textarea>
+        <input id="pQty" type="number" placeholder="Сколько штук" />
+        <button class="stock on" id="pStock" type="button">В наличии</button>
+        <button class="buy" id="saveProduct" type="button">Сохранить</button>
+        <p class="hint" id="saveMsg"></p>
+      </div>
+      <div id="adminOrders" class="screen">
+        <button class="back" type="button" data-admin="menu">Назад</button>
+        <p class="hint">Заказов пока нет. Кнопка уже на месте.</p>
+      </div>
+      <div id="adminClients" class="screen">
+        <button class="back" type="button" data-admin="menu">Назад</button>
+        <p class="hint">Клиентов пока нет. Кнопка уже на месте.</p>
+      </div>
     </section>
   </main>
   <nav>
@@ -81,78 +119,166 @@
     </button>
   </nav>
   <script>
-    const products = [];
+    const API = "https://elfasales-production.up.railway.app";
+    let products = [];
     let city = "reutlingen";
+    let adminCity = "reutlingen";
+    let photo = "";
+    let inStock = true;
+    let opened = null;
     const cart = {};
-    const orders = [];
-    const rub = (n) => n + " ₽";
+    const tg = window.Telegram && window.Telegram.WebApp;
+    if (tg) tg.ready();
+    const initHeader = { "x-telegram-init": tg && tg.initData ? tg.initData : "" };
+
+    function cityName(id) { return id === "tubingen" ? "Tübingen" : "Reutlingen"; }
+    function pic(p) {
+      return p.photo
+        ? `<img src="${p.photo}" alt="">`
+        : `<img alt="" style="background:#243246">`;
+    }
+
+    async function loadProducts() {
+      const res = await fetch(API + "/api/products");
+      if (!res.ok) throw new Error("api");
+      products = await res.json();
+    }
 
     function draw() {
-      document.querySelectorAll(".city").forEach((b) => b.classList.toggle("on", b.dataset.city === city));
+      document.querySelectorAll("[data-city]").forEach((b) => b.classList.toggle("on", b.dataset.city === city));
+      document.querySelectorAll("[data-admin-city]").forEach((b) => b.classList.toggle("on", b.dataset.adminCity === adminCity));
       const list = products.filter((p) => p.city === city);
       document.getElementById("grid").innerHTML = list.length
-        ? list.map((p) => `
-        <article>
-          <strong>${p.name}</strong>
-          <p class="hint">${p.ml} мл · ${p.mg} мг</p>
-          <span class="price">${rub(p.price)}</span>
-          <button class="add" data-add="${p.id}">+</button>
-        </article>`).join("")
+        ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<strong>${p.name}</strong></article></button>`).join("")
         : "<p class='hint'>В этом городе пока нет товаров.</p>";
+      const mine = products.filter((p) => p.city === adminCity);
+      document.getElementById("adminList").innerHTML = mine.map((p) => `
+        <div class="row">
+          <span>${p.name}</span>
+          <button class="ghost" data-del="${p.id}" style="width:auto;margin:0;padding:10px 14px">Удалить</button>
+        </div>`).join("") || "<p class='hint'>Пока пусто. Нажми плюс.</p>";
       const rows = Object.entries(cart);
       const box = document.getElementById("cartBox");
-      if (!rows.length) {
-        box.innerHTML = "<p class='hint'>Пусто</p>";
-        return;
-      }
-      let total = 0;
-      box.innerHTML = rows.map(([id, qty]) => {
-        const p = products.find((x) => x.id === id);
-        total += p.price * qty;
-        return `<p>${p.name} × ${qty}</p>`;
-      }).join("") + `<button class="buy" id="buy">Купить · ${rub(total)}</button>`;
-      document.getElementById("buy").onclick = () => {
-        const id = "ES-" + (1042 + orders.length);
-        orders.push(id);
-        for (const k of Object.keys(cart)) delete cart[k];
-        document.getElementById("orders").textContent = "Заказы: " + orders.join(", ");
-        alert("Заказ оформлен: " + id);
+      box.innerHTML = rows.length
+        ? rows.map(([id, qty]) => {
+            const p = products.find((x) => x.id === id);
+            return p ? `<p>${p.name} × ${qty}</p>` : "";
+          }).join("")
+        : "<p class='hint'>Пусто</p>";
+      if (!opened) return;
+      const p = products.find((x) => x.id === opened);
+      if (!p) return;
+      const can = p.in_stock && Number(p.qty) > 0;
+      document.getElementById("detailBox").innerHTML = `
+        <div class="shot">${pic(p)}</div>
+        <h1>${p.name}</h1>
+        <p class="hint">${p.ml} мл · ${p.mg} мг · ${cityName(p.city)}</p>
+        <p>${p.description || "Без описания"}</p>
+        <p class="hint">Остаток: ${p.qty}</p>
+        <button class="buy" id="addCart" ${can ? "" : "disabled"}>${can ? "Добавить в корзину" : "Нет в наличии"}</button>`;
+      const add = document.getElementById("addCart");
+      if (add && can) add.onclick = () => {
+        cart[p.id] = (cart[p.id] || 0) + 1;
         draw();
-        show("profile");
+        show("cart");
       };
     }
 
     function show(id) {
-      document.querySelectorAll(".screen").forEach((s) => s.classList.toggle("on", s.id === id));
+      document.querySelectorAll("main > .screen, main section.screen").forEach((s) => s.classList.toggle("on", s.id === id));
       document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("on", b.dataset.tab === id));
     }
+    function showAdmin(name) {
+      ["adminMenu", "adminGoods", "adminForm", "adminOrders", "adminClients"].forEach((id) => {
+        document.getElementById(id).classList.toggle("on", id === "admin" + name.charAt(0).toUpperCase() + name.slice(1) || id === "adminMenu" && name === "menu");
+      });
+      document.getElementById("adminMenu").classList.toggle("on", name === "menu");
+      document.getElementById("adminGoods").classList.toggle("on", name === "goods");
+      document.getElementById("adminForm").classList.toggle("on", name === "form");
+      document.getElementById("adminOrders").classList.toggle("on", name === "orders");
+      document.getElementById("adminClients").classList.toggle("on", name === "clients");
+    }
 
-    document.body.addEventListener("click", (e) => {
+    document.getElementById("pPhoto").onchange = () => {
+      const file = document.getElementById("pPhoto").files[0];
+      if (!file) return;
+      const img = new Image();
+      img.onload = () => {
+        const max = 900;
+        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        photo = canvas.toDataURL("image/jpeg", 0.72);
+      };
+      img.src = URL.createObjectURL(file);
+    };
+    document.getElementById("pStock").onclick = () => {
+      inStock = !inStock;
+      const b = document.getElementById("pStock");
+      b.classList.toggle("on", inStock);
+      b.textContent = inStock ? "В наличии" : "Нет в наличии";
+    };
+    document.getElementById("openForm").onclick = () => showAdmin("form");
+    document.getElementById("saveProduct").onclick = async () => {
+      const msg = document.getElementById("saveMsg");
+      const res = await fetch(API + "/api/products", {
+        method: "POST",
+        headers: { "content-type": "application/json", ...initHeader },
+        body: JSON.stringify({
+          city: adminCity,
+          name: document.getElementById("pName").value,
+          mg: document.getElementById("pMg").value,
+          ml: document.getElementById("pMl").value,
+          description: document.getElementById("pText").value,
+          qty: document.getElementById("pQty").value,
+          inStock,
+          photo,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        msg.textContent = data.error || "Не сохранилось";
+        return;
+      }
+      msg.textContent = "Сохранено";
+      document.getElementById("pName").value = "";
+      document.getElementById("pText").value = "";
+      photo = "";
+      await loadProducts();
+      draw();
+      showAdmin("goods");
+    };
+
+    document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
-      if (cityBtn) {
-        city = cityBtn.dataset.city;
-        draw();
-      }
-      const add = e.target.closest("[data-add]");
-      if (add) {
-        cart[add.dataset.add] = (cart[add.dataset.add] || 0) + 1;
-        draw();
-      }
+      if (cityBtn) { city = cityBtn.dataset.city; draw(); }
+      const adminCityBtn = e.target.closest("[data-admin-city]");
+      if (adminCityBtn) { adminCity = adminCityBtn.dataset.adminCity; draw(); }
+      const open = e.target.closest("[data-open]");
+      if (open) { opened = open.dataset.open; draw(); show("detail"); }
       const tab = e.target.closest("[data-tab]");
       if (tab) show(tab.dataset.tab);
-      const fake = e.target.closest("[data-fake]");
-      if (fake) document.getElementById("fake").textContent = fake.dataset.fake + ": пока пусто";
+      const adminBtn = e.target.closest("[data-admin]");
+      if (adminBtn) showAdmin(adminBtn.dataset.admin);
+      const del = e.target.closest("[data-del]");
+      if (del) {
+        await fetch(API + "/api/products?id=" + encodeURIComponent(del.dataset.del), { method: "DELETE", headers: initHeader });
+        await loadProducts();
+        draw();
+      }
     });
-    const ADMIN_ID = 7648089072;
-    const tg = window.Telegram && window.Telegram.WebApp;
-    if (tg) tg.ready();
+
     const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
-    const myId = tgUser ? Number(tgUser.id) : 0;
-    if (myId !== ADMIN_ID) {
+    if (!tgUser || Number(tgUser.id) !== 7648089072) {
       const adminBtn = document.querySelector('[data-tab="admin"]');
       if (adminBtn) adminBtn.remove();
     }
-    draw();
+    showAdmin("menu");
+    loadProducts().then(draw).catch(() => {
+      document.getElementById("grid").innerHTML = "<p class='hint'>База не ответила. Закрой магазин и открой снова.</p>";
+    });
   </script>
 </body>
 </html>
