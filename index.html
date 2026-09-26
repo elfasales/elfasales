@@ -157,7 +157,7 @@
       const mine = products.filter((p) => p.city === adminCity);
       document.getElementById("adminList").innerHTML = mine.map((p) => `
         <div class="row">
-          <span>${p.name}</span>
+          <button class="ghost" data-edit="${p.id}" style="width:auto;margin:0;padding:10px 14px;border:0">${p.name}</button>
           <button class="ghost" data-del="${p.id}" style="width:auto;margin:0;padding:10px 14px">Удалить</button>
         </div>`).join("") || "<p class='hint'>Пока пусто. Нажми плюс.</p>";
       const rows = Object.entries(cart);
