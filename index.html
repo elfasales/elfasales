@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ElfaSales</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
@@ -117,8 +118,11 @@
       if (fake) document.getElementById("fake").textContent = fake.dataset.fake + ": пока пусто";
     });
 const ADMIN_ID = 7648089072;
-const tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
-if (!tgUser || tgUser.id !== ADMIN_ID) {
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) tg.ready();
+const tgUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+const myId = tgUser ? Number(tgUser.id) : 0;
+if (myId !== ADMIN_ID) {
   const adminBtn = document.querySelector('[data-tab="admin"]');
   if (adminBtn) adminBtn.remove();
 }
