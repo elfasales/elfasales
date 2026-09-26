@@ -43,12 +43,6 @@
       <h1>Профиль</h1>
       <p class="hint" id="orders">Заказов пока нет.</p>
     </section>
-    <section id="support" class="screen">
-      <h1>Поддержка</h1>
-      <textarea id="msg" placeholder="Вопрос"></textarea>
-      <button class="buy" id="send">Отправить</button>
-      <p class="hint" id="sent"></p>
-    </section>
     <section id="admin" class="screen">
       <h1>Админ</h1>
       <p class="hint">Кнопки-заглушки. Потом закроем эту вкладку только для тебя.</p>
@@ -62,7 +56,6 @@
     <button class="on" data-tab="catalog">Каталог</button>
     <button data-tab="cart">Корзина</button>
     <button data-tab="profile">Профиль</button>
-    <button data-tab="support">Помощь</button>
     <button data-tab="admin">Админ</button>
   </nav>
   <script>
@@ -123,11 +116,12 @@
       const fake = e.target.closest("[data-fake]");
       if (fake) document.getElementById("fake").textContent = fake.dataset.fake + ": пока пусто";
     });
-    document.getElementById("send").onclick = () => {
-      const t = document.getElementById("msg").value.trim();
-      document.getElementById("sent").textContent = t ? "Отправлено (никому, это прототип)" : "Напиши текст";
-      document.getElementById("msg").value = "";
-    };
+const ADMIN_ID = 7648089072;
+const tgUser = window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user;
+if (!tgUser || tgUser.id !== ADMIN_ID) {
+  const adminBtn = document.querySelector('[data-tab="admin"]');
+  if (adminBtn) adminBtn.remove();
+}
     draw();
   </script>
 </body>
