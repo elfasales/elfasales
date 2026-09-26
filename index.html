@@ -5,35 +5,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ElfaSales</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap" rel="stylesheet" />
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: Segoe UI, sans-serif; background: #101820; color: #eef3f8; }
-    main { max-width: 420px; margin: 0 auto; padding: 20px 16px 96px; }
+    body { margin: 0; font-family: Nunito, Segoe UI, sans-serif; font-weight: 800; background: #101820; color: #eef3f8; }
+    main { max-width: 420px; margin: 0 auto; padding: 20px 16px 120px; }
     h1 { margin: 8px 0 4px; font-size: 28px; }
-    p.hint { margin: 0 0 16px; color: #9aafc3; }
-    .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
-    .city { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 14px 8px; }
+    p.hint { margin: 0 0 16px; color: #9aafc3; font-weight: 800; }
+    .brand { font-size: 22px; letter-spacing: 0.02em; }
+    .cities { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+    .city { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 18px 8px; font-size: 16px; min-height: 58px; }
     .city.on { background: #6cb6ff; color: #071018; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     article { border: 1px solid #2c3e52; background: #182433; border-radius: 16px; padding: 12px; min-height: 140px; display: flex; flex-direction: column; }
-    button { cursor: pointer; border: 0; border-radius: 12px; font-weight: 700; }
+    button { cursor: pointer; border: 0; border-radius: 16px; font-family: inherit; font-weight: 800; }
     .add, .buy { background: #6cb6ff; color: #071018; }
-    .add { margin-top: auto; align-self: flex-end; width: 40px; height: 40px; border-radius: 999px; }
-    .buy, .ghost { width: 100%; padding: 14px; margin-top: 12px; }
+    .add { margin-top: auto; align-self: flex-end; width: 48px; height: 48px; border-radius: 999px; font-size: 24px; }
+    .buy, .ghost { width: 100%; padding: 16px; margin-top: 12px; font-size: 17px; }
     .ghost { background: transparent; color: #eef3f8; border: 1px solid #2c3e52; }
-    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 6px; background: #101820; border-top: 1px solid #2c3e52; padding: 8px; }
-    nav button { background: transparent; color: #9aafc3; min-width: 72px; min-height: 44px; }
-    nav button.on { color: #6cb6ff; }
+    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 8px; background: #101820; border-top: 1px solid #2c3e52; padding: 10px 8px 14px; }
+    nav button { background: #182433; color: #9aafc3; border: 1px solid #2c3e52; width: 78px; min-height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 11px; }
+    nav button svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    nav button.on { color: #071018; background: #6cb6ff; border-color: #6cb6ff; }
     .price { color: #e8b86d; }
     .screen { display: none; }
     .screen.on { display: block; }
-    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; }
+    textarea { width: 100%; margin: 6px 0 10px; padding: 12px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; font-family: inherit; font-weight: 800; }
   </style>
 </head>
 <body>
   <main>
-    <strong>ElfaSales</strong>
+    <div class="brand">ElfaSales</div>
     <section id="catalog" class="screen on">
       <div class="cities">
         <button type="button" class="city on" data-city="reutlingen">Reutlingen</button>
@@ -59,10 +63,22 @@
     </section>
   </main>
   <nav>
-    <button class="on" data-tab="catalog">Каталог</button>
-    <button data-tab="cart">Корзина</button>
-    <button data-tab="profile">Профиль</button>
-    <button data-tab="admin">Админ</button>
+    <button class="on" data-tab="catalog">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Каталог
+    </button>
+    <button data-tab="cart">
+      <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6L5 3H2"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>
+      Корзина
+    </button>
+    <button data-tab="profile">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.4-3 3.8-4.5 7-4.5S17.6 16 19 19"/></svg>
+      Профиль
+    </button>
+    <button data-tab="admin">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.2M12 18.8V21M3 12h2.2M18.8 12H21M5.6 5.6l1.6 1.6M16.8 16.8l1.6 1.6M18.4 5.6l-1.6 1.6M7.2 16.8l-1.6 1.6"/></svg>
+      Админ
+    </button>
   </nav>
   <script>
     const products = [];
