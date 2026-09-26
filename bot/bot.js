@@ -91,7 +91,7 @@ function send(res, status, body) {
     "content-type": "application/json; charset=utf-8",
     "access-control-allow-origin": "*",
     "access-control-allow-headers": "content-type, x-telegram-init",
-    "access-control-allow-methods": "GET, POST, DELETE, OPTIONS",
+    "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
   });
   res.end(JSON.stringify(body));
 }
