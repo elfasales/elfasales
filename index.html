@@ -227,7 +227,7 @@
     document.getElementById("saveProduct").onclick = async () => {
       const msg = document.getElementById("saveMsg");
       const res = await fetch(API + "/api/products", {
-        method: "POST",
+        method: editing ? "PUT" : "POST",
         headers: { "content-type": "application/json", ...initHeader },
         body: JSON.stringify({
           city: adminCity,
@@ -239,6 +239,7 @@
           price: document.getElementById("pPrice").value,
           inStock,
           photo,
+          id: editing,
         }),
       });
       const data = await res.json().catch(() => ({}));
