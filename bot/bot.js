@@ -399,11 +399,35 @@ const server = createServer(async (req, res) => {
       send(res, 200, { code: "ELS-" + num, bought, active });
       return;
     }
-    if (req.method === "GET" && url.pathname === "/api/clients") {
+        if (req.method === "GET" && url.pathname === "/api/clients") {
       if (!isAdmin(req.headers["x-telegram-init"])) {
         send(res, 403, { error: "Только админ" });
         return;
       }
+      await readyDb();
+      await pool.query("CREATE TABLE IF NOT EXISTS clients (user_id TEXT PRIMARY KEY, num INT NOT NULL)");
+      await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS name TEXT NOT NULL DEFAULT ''");
+      await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS username TEXT NOT NULL DEFAULT ''");
+      await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS blocked BOOLEAN NOT NULL DEFAULT false");
+      const { rows } = await pool.query("SELECT user_id, num, name, username, blocked FROM clients ORDER BY num");
+      send(res, 200, rows);
+      return;
+    }
+    if (req.method === "POST" && url.pathname === "/api/clients/block") {
+      if (!isAdmin(req.headers["x-telegram-init"])) {
+        send(res, 403, { error: "Только админ" });
+        return;
+      }
+      const body = await readBody(req);
+      if (Number(body.id) === ADMIN_ID) {
+        send(res, 400, { error: "Нельзя блокировать админа" });
+        return;
+      }
+      await readyDb();
+      await pool.query("UPDATE clients SET blocked = $2 WHERE user_id = $1", [String(body.id), Boolean(body.blocked)]);
+      send(res, 200, { ok: true });
+      return;
+    }
       await readyDb();
       send(res, 200, []);
       return;
