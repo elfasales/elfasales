@@ -325,6 +325,7 @@ async function loadOrders() {
       const payBtn = e.target.closest("[data-pay]");
       if (payBtn) { payment = payBtn.dataset.pay; draw(); }
       if (e.target.closest("#checkout")) placeOrder();
+      if (e.target.closest("#orderBack")) { orderNote = ""; show("catalog"); }
       if (e.target.closest("#writeManager")) writeManager();
       const del = e.target.closest("[data-del]");
       if (del) {
