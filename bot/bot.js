@@ -313,10 +313,6 @@ const server = createServer(async (req, res) => {
       send(res, 200, []);
       return;
     }
-      await readyDb();
-      send(res, 200, []);
-      return;
-    }
     send(res, 404, { error: "Нет такого адреса" });
   } catch (err) {
     console.log("API:", err instanceof Error ? err.message : err);
