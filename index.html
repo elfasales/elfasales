@@ -335,11 +335,8 @@ async function loadOrders() {
   document.getElementById("boughtCount").textContent = data.bought || 0;
   document.getElementById("activeCount").textContent = data.active || 0;
 }
-  const active = orders.filter((order) => !order.status || order.status === "new");
-  const done = orders.filter((order) => order.status === "done");
-  document.getElementById("activeOrders").innerHTML = active.length ? active.map(card).join("") : "<p class='hint'>Пока нет.</p>";
-  document.getElementById("doneOrders").innerHTML = done.length ? done.map(card).join("") : "<p class='hint'>Пока нет.</p>";
-}  
+
+    
     document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
