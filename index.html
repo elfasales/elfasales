@@ -130,6 +130,8 @@
     let editing = null;
     let opened = null;
     const cart = {};
+    let payment = "";
+    let orderNote = "";
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) tg.ready();
     const initHeader = { "x-telegram-init": tg && tg.initData ? tg.initData : "" };
