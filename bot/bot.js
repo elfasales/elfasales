@@ -346,6 +346,36 @@ const server = createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
+        if (req.method === "GET" && url.pathname === "/api/my-orders") {
+      const initData = String(req.headers["x-telegram-init"] || "");
+      const params = new URLSearchParams(initData);
+      const hash = params.get("hash");
+      let customer = null;
+      if (hash) {
+        const pairs = [];
+        for (const [key, value] of params.entries()) {
+          if (key !== "hash") pairs.push(`${key}=${value}`);
+        }
+        pairs.sort();
+        const secret = createHmac("sha256", "WebAppData").update(token).digest();
+        const check = createHmac("sha256", secret).update(pairs.join("\n")).digest("hex");
+        if (check === hash) {
+          try { customer = JSON.parse(params.get("user") || "null"); } catch { customer = null; }
+        }
+      }
+      if (!customer || !customer.id) {
+        send(res, 403, { error: "Открой магазин из бота" });
+        return;
+      }
+      await readyDb();
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'");
+      const { rows } = await pool.query(
+        "SELECT id, items, total, payment, status FROM orders WHERE user_id = $1 ORDER BY created_at DESC",
+        [String(customer.id)],
+      );
+      send(res, 200, rows);
+      return;
+    }
     if (req.method === "GET" && url.pathname === "/api/clients") {
       if (!isAdmin(req.headers["x-telegram-init"])) {
         send(res, 403, { error: "Только админ" });
