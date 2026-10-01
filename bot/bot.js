@@ -246,6 +246,11 @@ const server = createServer(async (req, res) => {
         send(res, 403, { error: "Открой магазин из бота" });
         return;
       }
+      const ban = await pool.query("SELECT blocked FROM clients WHERE user_id = $1", [String(customer.id)]);
+      if (ban.rows[0] && ban.rows[0].blocked) {
+        send(res, 403, { error: "Вы заблокированы" });
+        return;
+      }    
       const body = await readBody(req);
       const payment = body.payment === "bank" ? "bank" : body.payment === "cash" ? "cash" : "";
       if (!payment) {
