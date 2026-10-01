@@ -271,6 +271,45 @@ if (orderNote && !rows.length) {
       showAdmin("goods");
     };
 
+    function writeManager() {
+  const link = "tg://user?id=7648089072";
+  if (tg && tg.openTelegramLink) tg.openTelegramLink(link);
+  else window.location.href = link;
+}
+async function placeOrder() {
+  const items = Object.entries(cart).map(([id, qty]) => ({ id, qty }));
+  const res = await fetch(API + "/api/orders", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...initHeader },
+    body: JSON.stringify({ items, payment, city }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    alert(data.error || "Не оформилось");
+    return;
+  }
+  for (const key of Object.keys(cart)) delete cart[key];
+  payment = "";
+  orderNote = "Ваш заказ принят. Напишите менеджеру для места встречи и времени.";
+  await loadProducts();
+  draw();
+  show("cart");
+}
+async function loadOrders() {
+  const listBox = document.getElementById("orderList");
+  const res = await fetch(API + "/api/orders", { headers: initHeader });
+  const list = await res.json().catch(() => []);
+  if (!res.ok || !Array.isArray(list) || !list.length) {
+    listBox.innerHTML = "<p class='hint'>Заказов пока нет.</p>";
+    return;
+  }
+  listBox.innerHTML = list.map((order) => {
+    const items = Array.isArray(order.items) ? order.items : [];
+    const pay = order.payment === "bank" ? "Банковский перевод" : "Наличные";
+    return `<div class="row" style="display:block"><strong>${order.id}</strong><p class="hint">${order.user_name || "Клиент"} · ${pay} · ${order.total} €</p><p>${items.map((item) => item.name + " × " + item.qty).join(", ")}</p></div>`;
+  }).join("");
+}
+    
     document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
@@ -282,6 +321,11 @@ if (orderNote && !rows.length) {
       if (tab) show(tab.dataset.tab);
       const adminBtn = e.target.closest("[data-admin]");
       if (adminBtn) showAdmin(adminBtn.dataset.admin);
+      if (adminBtn && adminBtn.dataset.admin === "orders") loadOrders();
+      const payBtn = e.target.closest("[data-pay]");
+      if (payBtn) { payment = payBtn.dataset.pay; draw(); }
+      if (e.target.closest("#checkout")) placeOrder();
+      if (e.target.closest("#writeManager")) writeManager();
       const del = e.target.closest("[data-del]");
       if (del) {
         await fetch(API + "/api/products?id=" + encodeURIComponent(del.dataset.del), { method: "DELETE", headers: initHeader });
