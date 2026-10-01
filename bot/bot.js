@@ -433,10 +433,6 @@ const server = createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
-      await readyDb();
-      send(res, 200, []);
-      return;
-    }
     send(res, 404, { error: "Нет такого адреса" });
   } catch (err) {
     console.log("API:", err instanceof Error ? err.message : err);
@@ -494,3 +490,9 @@ while (true) {
           ]],
         },
       });
+    }
+  } catch (err) {
+    console.log("Ошибка:", err instanceof Error ? err.message : err);
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+}
