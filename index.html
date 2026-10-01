@@ -166,7 +166,7 @@
       const rows = Object.entries(cart);
 const box = document.getElementById("cartBox");
 if (orderNote && !rows.length) {
-  box.innerHTML = `<p>${orderNote}</p><button type="button" class="buy" id="writeManager">Связаться с менеджером</button>`;
+  box.innerHTML = `<button type="button" class="back" id="orderBack">Назад</button><p>${orderNote}</p><button type="button" class="buy" id="writeManager">Связаться с менеджером</button>`;
 } else if (!rows.length) {
   box.innerHTML = "<p class='hint'>Пусто</p>";
 } else {
