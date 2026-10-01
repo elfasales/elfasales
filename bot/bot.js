@@ -367,13 +367,36 @@ const server = createServer(async (req, res) => {
         send(res, 403, { error: "Открой магазин из бота" });
         return;
       }
-      await readyDb();
+            await readyDb();
       await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'");
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS clients (
+          user_id TEXT PRIMARY KEY,
+          num INT NOT NULL
+        )
+      `);
+      const existing = await pool.query("SELECT num FROM clients WHERE user_id = $1", [String(customer.id)]);
+      let num = existing.rows[0] && existing.rows[0].num;
+      if (!num) {
+        const next = await pool.query("SELECT COALESCE(MAX(num), 0) + 1 AS n FROM clients");
+        num = next.rows[0].n;
+        await pool.query("INSERT INTO clients (user_id, num) VALUES ($1, $2)", [String(customer.id), num]);
+      }
       const { rows } = await pool.query(
-        "SELECT id, items, total, payment, status FROM orders WHERE user_id = $1 ORDER BY created_at DESC",
+        "SELECT items, status FROM orders WHERE user_id = $1",
         [String(customer.id)],
       );
-      send(res, 200, rows);
+      let bought = 0;
+      let active = 0;
+      for (const order of rows) {
+        const items = Array.isArray(order.items) ? order.items : [];
+        if (order.status === "done") {
+          for (const item of items) bought += Number(item.qty) || 0;
+        } else if (!order.status || order.status === "new") {
+          active += 1;
+        }
+      }
+      send(res, 200, { code: "ELS-" + num, bought, active });
       return;
     }
     if (req.method === "GET" && url.pathname === "/api/clients") {
