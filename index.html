@@ -331,6 +331,20 @@ async function loadOrders() {
       if (e.target.closest("#checkout")) placeOrder();
       if (e.target.closest("#orderBack")) { orderNote = ""; show("catalog"); }
       if (e.target.closest("#writeManager")) writeManager();
+      const statusBtn = e.target.closest("[data-status]");
+if (statusBtn) {
+  await fetch(API + "/api/orders/status", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...initHeader },
+    body: JSON.stringify({ id: statusBtn.dataset.id, status: statusBtn.dataset.status }),
+  });
+  await loadOrders();
+}
+const delOrder = e.target.closest("[data-del-order]");
+if (delOrder) {
+  await fetch(API + "/api/orders?id=" + encodeURIComponent(delOrder.dataset.delOrder), { method: "DELETE", headers: initHeader });
+  await loadOrders();
+}
       const del = e.target.closest("[data-del]");
       if (del) {
         await fetch(API + "/api/products?id=" + encodeURIComponent(del.dataset.del), { method: "DELETE", headers: initHeader });
