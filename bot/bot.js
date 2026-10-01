@@ -305,6 +305,47 @@ const server = createServer(async (req, res) => {
       send(res, 200, rows);
       return;
     }
+        if (req.method === "POST" && url.pathname === "/api/orders/status") {
+      if (!isAdmin(req.headers["x-telegram-init"])) {
+        send(res, 403, { error: "Только админ" });
+        return;
+      }
+      const body = await readBody(req);
+      const status = body.status === "done" ? "done" : body.status === "cancelled" ? "cancelled" : "";
+      if (!body.id || !status) {
+        send(res, 400, { error: "Нет статуса" });
+        return;
+      }
+      await readyDb();
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'");
+      const found = await pool.query("SELECT id, user_id FROM orders WHERE id = $1", [body.id]);
+      const order = found.rows[0];
+      if (!order) {
+        send(res, 404, { error: "Заказ не найден" });
+        return;
+      }
+      await pool.query("UPDATE orders SET status = $2 WHERE id = $1", [body.id, status]);
+      const text = status === "done"
+        ? `Ваш заказ ${order.id} выполнен.`
+        : `Ваш заказ ${order.id} отменён.`;
+      try {
+        await apiCall("sendMessage", { chat_id: order.user_id, text });
+      } catch (err) {
+        console.log("Сообщение:", err instanceof Error ? err.message : err);
+      }
+      send(res, 200, { ok: true });
+      return;
+    }
+    if (req.method === "DELETE" && url.pathname === "/api/orders") {
+      if (!isAdmin(req.headers["x-telegram-init"])) {
+        send(res, 403, { error: "Только админ" });
+        return;
+      }
+      await readyDb();
+      await pool.query("DELETE FROM orders WHERE id = $1", [url.searchParams.get("id")]);
+      send(res, 200, { ok: true });
+      return;
+    }
     if (req.method === "GET" && url.pathname === "/api/clients") {
       if (!isAdmin(req.headers["x-telegram-init"])) {
         send(res, 403, { error: "Только админ" });
