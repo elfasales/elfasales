@@ -225,11 +225,94 @@ const server = createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
-    if (req.method === "GET" && (url.pathname === "/api/orders" || url.pathname === "/api/clients")) {
+        if (req.method === "POST" && url.pathname === "/api/orders") {
+      const initData = String(req.headers["x-telegram-init"] || "");
+      const params = new URLSearchParams(initData);
+      const hash = params.get("hash");
+      let customer = null;
+      if (hash) {
+        const pairs = [];
+        for (const [key, value] of params.entries()) {
+          if (key !== "hash") pairs.push(`${key}=${value}`);
+        }
+        pairs.sort();
+        const secret = createHmac("sha256", "WebAppData").update(token).digest();
+        const check = createHmac("sha256", secret).update(pairs.join("\n")).digest("hex");
+        if (check === hash) {
+          try { customer = JSON.parse(params.get("user") || "null"); } catch { customer = null; }
+        }
+      }
+      if (!customer || !customer.id) {
+        send(res, 403, { error: "Открой магазин из бота" });
+        return;
+      }
+      const body = await readBody(req);
+      const payment = body.payment === "bank" ? "bank" : body.payment === "cash" ? "cash" : "";
+      if (!payment) {
+        send(res, 400, { error: "Выбери оплату" });
+        return;
+      }
+      await readyDb();
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment TEXT NOT NULL DEFAULT ''");
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS username TEXT NOT NULL DEFAULT ''");
+      const lines = [];
+      let total = 0;
+      for (const raw of body.items || []) {
+        const qty = Number(raw.qty);
+        if (!qty) continue;
+        const found = await pool.query("SELECT id, name, price, qty FROM products WHERE id = $1", [raw.id]);
+        const product = found.rows[0];
+        if (!product || Number(product.qty) < qty) {
+          send(res, 400, { error: "Не хватает: " + (product ? product.name : "товар") });
+          return;
+        }
+        lines.push({ id: product.id, name: product.name, qty, price: Number(product.price) });
+        total += Number(product.price) * qty;
+      }
+      if (!lines.length) {
+        send(res, 400, { error: "Корзина пустая" });
+        return;
+      }
+      const id = "ES-" + randomUUID().slice(0, 6).toUpperCase();
+      const userName = [customer.first_name, customer.last_name].filter(Boolean).join(" ");
+      const username = customer.username || "";
+      await pool.query(
+        `INSERT INTO orders (id, user_id, user_name, username, city, items, total, payment)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [id, String(customer.id), userName, username, body.city || "", JSON.stringify(lines), total, payment],
+      );
+      for (const line of lines) {
+        await pool.query(
+          "UPDATE products SET qty = qty - $2, in_stock = (qty - $2) > 0 WHERE id = $1",
+          [line.id, line.qty],
+        );
+      }
+      send(res, 200, { id });
+      return;
+    }
+    if (req.method === "GET" && url.pathname === "/api/orders") {
       if (!isAdmin(req.headers["x-telegram-init"])) {
         send(res, 403, { error: "Только админ" });
         return;
       }
+      await readyDb();
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment TEXT NOT NULL DEFAULT ''");
+      await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS username TEXT NOT NULL DEFAULT ''");
+      const { rows } = await pool.query(
+        "SELECT id, created_at, user_id, user_name, username, city, items, total, payment FROM orders ORDER BY created_at DESC",
+      );
+      send(res, 200, rows);
+      return;
+    }
+    if (req.method === "GET" && url.pathname === "/api/clients") {
+      if (!isAdmin(req.headers["x-telegram-init"])) {
+        send(res, 403, { error: "Только админ" });
+        return;
+      }
+      await readyDb();
+      send(res, 200, []);
+      return;
+    }
       await readyDb();
       send(res, 200, []);
       return;
