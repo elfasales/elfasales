@@ -426,7 +426,36 @@ while (true) {
       offset = update.update_id + 1;
       const text = update.message?.text ?? "";
       const chatId = update.message?.chat?.id;
-      if (!chatId || !text.startsWith("/start")) continue;
+            if (!chatId || !text.startsWith("/start")) continue;
+      const from = update.message.from || {};
+      const userId = String(from.id || chatId);
+      const name = [from.first_name, from.last_name].filter(Boolean).join(" ");
+      const username = from.username || "";
+      let blocked = false;
+      try {
+        await readyDb();
+        await pool.query("CREATE TABLE IF NOT EXISTS clients (user_id TEXT PRIMARY KEY, num INT NOT NULL)");
+        await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS name TEXT NOT NULL DEFAULT ''");
+        await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS username TEXT NOT NULL DEFAULT ''");
+        await pool.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS blocked BOOLEAN NOT NULL DEFAULT false");
+        const existing = await pool.query("SELECT blocked FROM clients WHERE user_id = $1", [userId]);
+        if (existing.rows[0]) {
+          blocked = Boolean(existing.rows[0].blocked);
+          await pool.query("UPDATE clients SET name = $2, username = $3 WHERE user_id = $1", [userId, name, username]);
+        } else {
+          const next = await pool.query("SELECT COALESCE(MAX(num), 0) + 1 AS n FROM clients");
+          await pool.query(
+            "INSERT INTO clients (user_id, num, name, username, blocked) VALUES ($1,$2,$3,$4,false)",
+            [userId, next.rows[0].n, name, username],
+          );
+        }
+      } catch (err) {
+        console.log("Клиент:", err instanceof Error ? err.message : err);
+      }
+      if (blocked) {
+        await apiCall("sendMessage", { chat_id: chatId, text: "Вы заблокированы. Магазин недоступен." });
+        continue;
+      }
       await apiCall("sendMessage", {
         chat_id: chatId,
         text: "Добро пожаловать!\nОткройте mini-app чтобы оформить заказ!",
@@ -436,9 +465,3 @@ while (true) {
           ]],
         },
       });
-    }
-  } catch (err) {
-    console.log("Ошибка:", err instanceof Error ? err.message : err);
-    await new Promise((r) => setTimeout(r, 3000));
-  }
-}
