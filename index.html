@@ -349,7 +349,7 @@ async function loadOrders() {
       const open = e.target.closest("[data-open]");
       if (open) { opened = open.dataset.open; draw(); show("detail"); }
       const tab = e.target.closest("[data-tab]");
-      if (tab) show(tab.dataset.tab);
+      if (tab) { show(tab.dataset.tab); if (tab.dataset.tab === "profile") loadProfile(); }
       const adminBtn = e.target.closest("[data-admin]");
       if (adminBtn) showAdmin(adminBtn.dataset.admin);
       if (adminBtn && adminBtn.dataset.admin === "orders") loadOrders();
