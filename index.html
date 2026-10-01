@@ -368,6 +368,7 @@ async function loadClients() {
       const adminBtn = e.target.closest("[data-admin]");
       if (adminBtn) showAdmin(adminBtn.dataset.admin);
       if (adminBtn && adminBtn.dataset.admin === "orders") loadOrders();
+      if (adminBtn && adminBtn.dataset.admin === "clients") loadClients();
       const payBtn = e.target.closest("[data-pay]");
       if (payBtn) { payment = payBtn.dataset.pay; draw(); }
       if (e.target.closest("#checkout")) placeOrder();
