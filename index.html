@@ -388,6 +388,15 @@ if (delOrder) {
   await fetch(API + "/api/orders?id=" + encodeURIComponent(delOrder.dataset.delOrder), { method: "DELETE", headers: initHeader });
   await loadOrders();
 }
+      const blockBtn = e.target.closest("[data-block]");
+if (blockBtn) {
+  await fetch(API + "/api/clients/block", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...initHeader },
+    body: JSON.stringify({ id: blockBtn.dataset.user, blocked: blockBtn.dataset.block === "1" }),
+  });
+  await loadClients();
+}
       const del = e.target.closest("[data-del]");
       if (del) {
         await fetch(API + "/api/products?id=" + encodeURIComponent(del.dataset.del), { method: "DELETE", headers: initHeader });
