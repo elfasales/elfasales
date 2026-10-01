@@ -313,7 +313,25 @@ async function placeOrder() {
   draw();
   show("cart");
 }
-async function loadOrders() {
+async function loadClients() {
+  const res = await fetch(API + "/api/clients", { headers: initHeader });
+  const list = await res.json().catch(() => []);
+  const people = Array.isArray(list) ? list : [];
+  document.getElementById("clientCount").textContent = "Пользователей: " + people.length;
+  const box = document.getElementById("clientList");
+  if (!people.length) {
+    box.innerHTML = "<p class='hint'>Пока никого нет. Пусть человек нажмёт /start.</p>";
+    return;
+  }
+  box.innerHTML = people.map((person) => {
+    const blocked = person.blocked === true;
+    const button = blocked
+      ? `<button type="button" class="ghost" data-block="0" data-user="${person.user_id}">Разблокировать</button>`
+      : `<button type="button" class="ghost" data-block="1" data-user="${person.user_id}">Заблокировать</button>`;
+    return `<div class="stat" style="width:100%;margin:0 0 10px"><span>${person.name || "Без имени"}</span><span>@${person.username || "нет"}</span><span>Id: ${person.user_id}</span>${button}</div>`;
+  }).join("");
+}
+    async function loadOrders() {
   const listBox = document.getElementById("orderList");
   const res = await fetch(API + "/api/orders", { headers: initHeader });
   const list = await res.json().catch(() => []);
