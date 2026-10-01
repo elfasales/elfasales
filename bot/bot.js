@@ -299,7 +299,7 @@ const server = createServer(async (req, res) => {
       await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment TEXT NOT NULL DEFAULT ''");
       await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS username TEXT NOT NULL DEFAULT ''");
       const { rows } = await pool.query(
-        "SELECT id, created_at, user_id, user_name, username, city, items, total, payment FROM orders ORDER BY created_at DESC",
+        "SELECT id, created_at, user_id, user_name, username, city, items, total, payment, status FROM orders ORDER BY created_at DESC",
       );
       send(res, 200, rows);
       return;
