@@ -369,7 +369,11 @@ async function placeOrder() {
   });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) { msg.textContent = data.error || "Не отправилось"; return; }
-  msg.textContent = "Отправлено: " + data.sent + ". Не дошло: " + data.failed;
+  const missed = Array.isArray(data.missed) ? data.missed : [];
+  msg.style.whiteSpace = "pre-line";
+  msg.textContent = missed.length
+    ? "Отправлено: " + data.sent + ". Не дошло:\n" + missed.join("\n")
+    : "Отправлено: " + data.sent + ". Всем дошло.";
   field.value = "";
 }
 async function loadClients() {
