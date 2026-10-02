@@ -371,7 +371,7 @@ async function loadClients() {
     const items = Array.isArray(order.items) ? order.items : [];
     const pay = order.payment === "bank" ? "Банковский перевод" : "Наличные";
     const statusName = order.status === "done" ? "Выполнен" : order.status === "cancelled" ? "Отменён" : "Новый";
-    return `<div class="row" style="display:block"><strong>${order.id}</strong><p class="hint">${order.user_name || "Клиент"} · ${pay} · ${order.total} € · ${statusName}</p><p>${items.map((item) => item.name + " × " + item.qty).join(", ")}</p><button type="button" class="ghost" data-status="done" data-id="${order.id}">Выполнен</button><button type="button" class="ghost" data-status="cancelled" data-id="${order.id}">Отменён</button><button type="button" class="ghost" data-del-order="${order.id}">Удалить</button></div>`;
+    return `<div class="row" style="display:block"><strong>${order.id}</strong><p class="hint">${order.user_name || "Клиент"} · ${pay} · ${order.total} € · ${statusName}</p><p>${items.map((item) => item.name + " × " + item.qty).join(", ")}</p><div class="orderActs"><button type="button" class="ghost" data-status="done" data-id="${order.id}">Выполнен</button><button type="button" class="ghost" data-status="cancelled" data-id="${order.id}">Отменён</button><button type="button" class="ghost wide" data-del-order="${order.id}">Удалить</button></div></div>`;
   }).join("");
 }
     
