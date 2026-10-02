@@ -190,7 +190,6 @@
     let orderNote = "";
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) tg.ready();
-    const bg = document.getElementById("bg");
     const initHeader = { "x-telegram-init": tg && tg.initData ? tg.initData : "" };
 
     function cityName(id) { return id === "tubingen" ? "Tübingen" : "Reutlingen"; }
