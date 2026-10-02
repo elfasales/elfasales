@@ -155,7 +155,10 @@
 <div id="adminMail" class="screen">
   <button class="back" type="button" data-admin="menu">Назад</button>
   <h1>Рассылка</h1>
-  <p class="hint">Пока пусто. Позже отсюда уйдёт сообщение всем, кто нажал /start.</p>
+  <p class="hint">Сообщение уйдёт всем, кто нажал /start и не заблокирован.</p>
+  <textarea id="mailText" placeholder="Текст сообщения" maxlength="1000"></textarea>
+  <button type="button" class="buy" id="sendMail">Отправить</button>
+  <p class="hint" id="mailMsg"></p>
 </div>
     </section>
   </main>
