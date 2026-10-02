@@ -174,7 +174,7 @@
       document.querySelectorAll("[data-admin-city]").forEach((b) => b.classList.toggle("on", b.dataset.adminCity === adminCity));
       const list = products.filter((p) => p.city === city);
       document.getElementById("grid").innerHTML = list.length
-        ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<strong>${p.name}<br><span class="price">${p.price} €</span></strong><span class="badge ${p.in_stock && Number(p.qty) > 0 ? "yes" : "no"}">${p.in_stock && Number(p.qty) > 0 ? "В наличии" : "Нет в наличии"}</span></article></button>`).join("")
+        ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<div class="pad"><strong>${p.name}</strong><span class="price">${Number(p.price).toFixed(2)} EUR</span><span class="stockline">${p.in_stock && Number(p.qty) > 0 ? "В наличии: " + p.qty : "Нет в наличии"}</span></div></article></button>`).join("")
         : "<p class='hint'>В этом городе пока нет товаров.</p>";
       const mine = products.filter((p) => p.city === adminCity);
       document.getElementById("adminList").innerHTML = mine.map((p) => `
