@@ -386,7 +386,25 @@ async function loadClients() {
       if (adminBtn && adminBtn.dataset.admin === "clients") loadClients();
       const payBtn = e.target.closest("[data-pay]");
       if (payBtn) { payment = payBtn.dataset.pay; draw(); }
-      if (e.target.closest("#checkout")) placeOrder();
+      if (e.target.closest("#checkout")) {
+  if (!payment) { alert("Выбери способ оплаты"); return; }
+  placeOrder();
+}
+const minus = e.target.closest("[data-minus]");
+if (minus) {
+  const id = minus.dataset.minus;
+  cart[id] = (cart[id] || 1) - 1;
+  if (cart[id] <= 0) delete cart[id];
+  draw();
+}
+const plus = e.target.closest("[data-plus]");
+if (plus) {
+  const id = plus.dataset.plus;
+  const product = products.find((x) => x.id === id);
+  if (product && (cart[id] || 0) >= Number(product.qty)) return;
+  cart[id] = (cart[id] || 0) + 1;
+  draw();
+}
       if (e.target.closest("#orderBack")) { orderNote = ""; show("catalog"); }
       if (e.target.closest("#writeManager")) writeManager();
       const statusBtn = e.target.closest("[data-status]");
