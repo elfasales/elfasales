@@ -423,6 +423,7 @@ if (plus) {
 }
       if (e.target.closest("#orderBack")) { orderNote = ""; show("catalog"); }
       if (e.target.closest("#writeManager")) writeManager();
+      if (e.target.closest("#support")) writeManager();
       const statusBtn = e.target.closest("[data-status]");
 if (statusBtn) {
   await fetch(API + "/api/orders/status", {
