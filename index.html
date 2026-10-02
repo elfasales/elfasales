@@ -356,6 +356,22 @@ async function placeOrder() {
   draw();
   show("cart");
 }
+    async function sendMail() {
+  const field = document.getElementById("mailText");
+  const msg = document.getElementById("mailMsg");
+  const text = field.value.trim();
+  if (!text) { msg.textContent = "Напиши текст"; return; }
+  msg.textContent = "Отправляю...";
+  const res = await fetch(API + "/api/mail", {
+    method: "POST",
+    headers: { "content-type": "application/json", ...initHeader },
+    body: JSON.stringify({ text }),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) { msg.textContent = data.error || "Не отправилось"; return; }
+  msg.textContent = "Отправлено: " + data.sent + ". Не дошло: " + data.failed;
+  field.value = "";
+}
 async function loadClients() {
   const res = await fetch(API + "/api/clients", { headers: initHeader });
   const list = await res.json().catch(() => []);
