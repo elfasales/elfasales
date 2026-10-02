@@ -19,7 +19,9 @@
     .brand { font-size: 22px; }
     .cities, .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
     .menu { grid-template-columns: 1fr 1fr; }
-    #adminMenu button { aspect-ratio: 1; min-height: 0; font-size: 16px; }
+    #adminMenu.screen.on { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #adminMenu h1 { grid-column: 1 / -1; margin-bottom: 4px; }
+    #adminMenu button { aspect-ratio: 1; min-height: 0; width: 100%; font-size: 16px; }
     .city, .menu button, .plus { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 18px 8px; font-size: 16px; min-height: 58px; }
     .emptycart { min-height: 52vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
     .emptycart .bubble { width: 88px; height: 88px; border-radius: 50%; background: #1c2633; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
