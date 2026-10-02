@@ -445,19 +445,21 @@ const server = createServer(async (req, res) => {
     return;
   }
   await readyDb();
-  const { rows } = await pool.query("SELECT user_id FROM clients WHERE blocked = false");
+  const { rows } = await pool.query("SELECT user_id, name, username FROM clients WHERE blocked = false");
   let sent = 0;
-  let failed = 0;
+  const missed = [];
   for (const person of rows) {
     try {
       await apiCall("sendMessage", { chat_id: person.user_id, text: text.slice(0, 1000) });
       sent += 1;
     } catch {
-      failed += 1;
+      const who = person.name || "Без имени";
+      const nick = person.username ? " @" + person.username : "";
+      missed.push(who + nick);
     }
     await new Promise((r) => setTimeout(r, 40));
   }
-  send(res, 200, { sent, failed });
+  send(res, 200, { sent, failed: missed.length, missed });
   return;
 }
     send(res, 404, { error: "Нет такого адреса" });
