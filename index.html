@@ -21,9 +21,10 @@
     .rules li { margin: 0 0 14px; line-height: 1.35; }
     .cities, .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
     .menu { grid-template-columns: 1fr 1fr; }
-    #adminMenu.screen.on { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 78%; margin: 8px auto 0; }
-    #adminMenu h1 { grid-column: 1 / -1; margin-bottom: 4px; }
-    #adminMenu button { aspect-ratio: 1; min-height: 0; width: 100%; font-size: 16px; }
+    #adminMenu.screen.on { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #adminMenu h1 { grid-column: 1 / -1; margin: 0 0 4px -8px; text-align: left; }
+    #adminMenu button { aspect-ratio: 1; min-height: 0; width: 100%; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    #adminMenu button svg { width: 34px; height: 34px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .orderActs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
     .orderActs .ghost { width: 100%; margin: 0; padding: 8px 6px; font-size: 14px; }
     .orderActs .wide { grid-column: 1 / -1; }
