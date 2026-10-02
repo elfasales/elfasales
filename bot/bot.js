@@ -433,6 +433,33 @@ const server = createServer(async (req, res) => {
       send(res, 200, { ok: true });
       return;
     }
+    if (req.method === "POST" && url.pathname === "/api/mail") {
+  if (!isAdmin(req.headers["x-telegram-init"])) {
+    send(res, 403, { error: "Только админ" });
+    return;
+  }
+  const body = await readBody(req);
+  const text = String(body.text || "").trim();
+  if (!text) {
+    send(res, 400, { error: "Напиши текст" });
+    return;
+  }
+  await readyDb();
+  const { rows } = await pool.query("SELECT user_id FROM clients WHERE blocked = false");
+  let sent = 0;
+  let failed = 0;
+  for (const person of rows) {
+    try {
+      await apiCall("sendMessage", { chat_id: person.user_id, text: text.slice(0, 1000) });
+      sent += 1;
+    } catch {
+      failed += 1;
+    }
+    await new Promise((r) => setTimeout(r, 40));
+  }
+  send(res, 200, { sent, failed });
+  return;
+}
     send(res, 404, { error: "Нет такого адреса" });
   } catch (err) {
     console.log("API:", err instanceof Error ? err.message : err);
