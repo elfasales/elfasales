@@ -207,14 +207,14 @@ if (orderNote && !rows.length) {
     const p = products.find((x) => x.id === id);
     if (!p) return "";
     total += Number(p.price) * qty;
-    return `<p>${p.name} × ${qty} · ${Number(p.price) * qty} €</p>`;
+    return `<div class="qline"><strong>${p.name}</strong><div class="qtyrow"><button type="button" data-minus="${p.id}">−</button><span>${qty}</span><button type="button" data-plus="${p.id}">+</button></div><span class="price">${(Number(p.price) * qty).toFixed(2)} EUR</span></div>`;
   }).join("");
-  box.innerHTML = lines + `
-    <p class="price">Итого: ${total} €</p>
+  box.innerHTML = `<div class="cline">${lines}</div>
+    <p class="price">Итого: ${total.toFixed(2)} EUR</p>
     <p class="hint">Оплата</p>
     <button type="button" class="ghost ${payment === "cash" ? "stock on" : ""}" data-pay="cash">Наличные</button>
     <button type="button" class="ghost ${payment === "bank" ? "stock on" : ""}" data-pay="bank">Банковский перевод</button>
-    <button type="button" class="buy" id="checkout" ${payment ? "" : "disabled"}>Оформить заказ</button>`;
+    <button type="button" class="buy" id="checkout">Оформить заказ</button>`;
 }
       if (!opened) return;
       const p = products.find((x) => x.id === opened);
