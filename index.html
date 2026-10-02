@@ -194,6 +194,10 @@
     let orderNote = "";
     const tg = window.Telegram && window.Telegram.WebApp;
     if (tg) tg.ready();
+    const bg = document.getElementById("bg");
+const startBg = () => { if (bg) bg.play().catch(() => {}); };
+startBg();
+document.addEventListener("pointerdown", startBg, { once: true });
     const initHeader = { "x-telegram-init": tg && tg.initData ? tg.initData : "" };
 
     function cityName(id) { return id === "tubingen" ? "Tübingen" : "Reutlingen"; }
