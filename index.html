@@ -212,7 +212,8 @@ if (orderNote && !rows.length) {
         <h1>${p.name}</h1>
         <p class="hint">${p.ml} мл · ${p.mg} мг · ${cityName(p.city)}</p>
         <p>${p.description || "Без описания"}</p>
-        <p class="hint">Остаток: ${p.qty}</p>
+        <p class="price">${Number(p.price).toFixed(2)} EUR</p>
+        <p class="stockline">${can ? "В наличии: " + p.qty : "Нет в наличии"}</p>
         <button class="buy" id="addCart" ${can ? "" : "disabled"}>${can ? "Добавить в корзину" + (cart[p.id] ? " · " + cart[p.id] : "") : "Нет в наличии"}</button>`;
       const add = document.getElementById("addCart");
       if (add && can) add.onclick = () => {
