@@ -112,6 +112,7 @@ async function readyDb() {
     )
   `);
   await pool.query("ALTER TABLE products ADD COLUMN IF NOT EXISTS price INT NOT NULL DEFAULT 0");
+  await pool.query("ALTER TABLE products ADD COLUMN IF NOT EXISTS brand TEXT NOT NULL DEFAULT ''");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS orders (
       id TEXT PRIMARY KEY,
