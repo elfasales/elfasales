@@ -55,7 +55,14 @@
     .badge.yes { background: #6cb6ff; color: #071018; }
     .badge.no { background: #243246; color: #9aafc3; }
     .pad { display: block; padding: 12px; }
-    article strong { display: block; padding: 0; font-weight: 700; }
+    article strong { display: block; padding: 0; font-weight: 700; color: #fff; }
+    button.card { color: #fff; }
+    .screen { display: none; }
+    .screen.on { display: block; animation: fadeup .22s ease; }
+    @keyframes fadeup { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    button, .city, .ghost, .buy, .back, nav button { transition: background .2s ease, color .2s ease, border-color .2s ease; }
+    .brands { grid-template-columns: 1fr 1fr; margin-top: 0; }
+    .brands .city { padding: 10px 6px; min-height: 42px; font-size: 13px; }
     button { cursor: pointer; border: 0; border-radius: 16px; font-family: inherit; font-weight: 700; }
     .buy { background: #6cb6ff; color: #071018; width: 100%; padding: 16px; margin-top: 12px; font-size: 17px; }
     .buy:disabled { background: #2c3e52; color: #9aafc3; }
