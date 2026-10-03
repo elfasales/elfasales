@@ -319,7 +319,7 @@ if (orderNote && !rows.length) {
       b.classList.toggle("on", inStock);
       b.textContent = inStock ? "В наличии" : "Нет в наличии";
     };
-    document.getElementById("openForm").onclick = () => { editing = null; photo = ""; showAdmin("form"); };
+    document.getElementById("openForm").onclick = () => { editing = null; photo = ""; adminBrand = "elfliq"; showAdmin("form"); draw(); };
     document.getElementById("saveProduct").onclick = async () => {
       const msg = document.getElementById("saveMsg");
       const res = await fetch(API + "/api/products", {
