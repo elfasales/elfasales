@@ -163,8 +163,8 @@ const server = createServer(async (req, res) => {
       await readyDb();
       const id = randomUUID();
       await pool.query(
-        `INSERT INTO products (id, city, name, mg, ml, description, qty, in_stock, photo, price)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        `INSERT INTO products (id, city, name, mg, ml, description, qty, in_stock, photo, price, brand)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
         [
           id,
           body.city === "tubingen" ? "tubingen" : "reutlingen",
