@@ -444,6 +444,10 @@ async function loadClients() {
     document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
+      const brandBtn = e.target.closest("[data-brand]");
+      if (brandBtn) { flavor = brandBtn.dataset.brand; draw(); }
+      const formBrand = e.target.closest("[data-form-brand]");
+      if (formBrand) { adminBrand = formBrand.dataset.formBrand; draw(); }
       const adminCityBtn = e.target.closest("[data-admin-city]");
       if (adminCityBtn) { adminCity = adminCityBtn.dataset.adminCity; draw(); }
       const open = e.target.closest("[data-open]");
