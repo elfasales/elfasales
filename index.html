@@ -346,6 +346,7 @@ if (orderNote && !rows.length) {
       }
       msg.textContent = "Сохранено";
       document.getElementById("pName").value = "";
+      adminBrand = p.brand === "chaser" || p.brand === "hqd" ? p.brand : "elfliq";
       document.getElementById("pText").value = "";
       photo = "";
       await loadProducts();
