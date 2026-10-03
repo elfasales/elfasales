@@ -233,6 +233,9 @@
     function draw() {
       document.querySelectorAll("[data-city]").forEach((b) => b.classList.toggle("on", b.dataset.city === city));
       document.querySelectorAll("[data-admin-city]").forEach((b) => b.classList.toggle("on", b.dataset.adminCity === adminCity));
+      if (city === "tubingen" && flavor === "hqd") flavor = "all";
+      const hqd = document.querySelector("[data-brand='hqd']");
+      const list = products.filter((p) => p.city === city && (flavor === "all" || p.brand === flavor) && !(city === "tubingen" && p.brand === "hqd"));
       document.querySelectorAll("[data-brand]").forEach((b) => b.classList.toggle("on", b.dataset.brand === flavor));
       document.querySelectorAll("[data-form-brand]").forEach((b) => b.classList.toggle("on", b.dataset.formBrand === adminBrand));
       const list = products.filter((p) => p.city === city && (flavor === "all" || p.brand === flavor));
