@@ -238,7 +238,6 @@
       const list = products.filter((p) => p.city === city && (flavor === "all" || p.brand === flavor) && !(city === "tubingen" && p.brand === "hqd"));
       document.querySelectorAll("[data-brand]").forEach((b) => b.classList.toggle("on", b.dataset.brand === flavor));
       document.querySelectorAll("[data-form-brand]").forEach((b) => b.classList.toggle("on", b.dataset.formBrand === adminBrand));
-      const list = products.filter((p) => p.city === city && (flavor === "all" || p.brand === flavor));
       document.getElementById("grid").innerHTML = list.length
         ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<div class="pad"><strong>${p.name}</strong><span class="price">${Number(p.price).toFixed(2)} EUR</span><span class="stockline">${p.in_stock && Number(p.qty) > 0 ? "В наличии: " + p.qty : "Нет в наличии"}</span></div></article></button>`).join("")
         : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
