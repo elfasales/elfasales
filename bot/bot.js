@@ -327,7 +327,9 @@ const server = createServer(async (req, res) => {
         return;
       }
           if (status === "done" && order.status !== "done") {
-  const items = Array.isArray(order.items) ? order.items : [];
+  let items = order.items;
+if (typeof items === "string") { try { items = JSON.parse(items); } catch { items = []; } }
+if (!Array.isArray(items)) items = [];
   for (const line of items) {
     const n = Number(line.qty) || 0;
     if (!n || !line.id) continue;
