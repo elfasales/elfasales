@@ -332,6 +332,17 @@ const server = createServer(async (req, res) => {
         send(res, 404, { error: "Заказ не найден" });
         return;
       }
+          if (status === "done" && order.status !== "done") {
+  const items = Array.isArray(order.items) ? order.items : [];
+  for (const line of items) {
+    const n = Number(line.qty) || 0;
+    if (!n || !line.id) continue;
+    await pool.query(
+      "UPDATE products SET qty = GREATEST(qty - $2, 0), in_stock = GREATEST(qty - $2, 0) > 0 WHERE id = $1",
+      [line.id, n],
+    );
+  }
+}
       await pool.query("UPDATE orders SET status = $2 WHERE id = $1", [body.id, status]);
       const text = status === "done"
         ? `Ваш заказ ${order.id} выполнен.`
