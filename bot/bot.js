@@ -289,12 +289,6 @@ const server = createServer(async (req, res) => {
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
         [id, String(customer.id), userName, username, body.city || "", JSON.stringify(lines), total, payment],
       );
-      for (const line of lines) {
-  await pool.query(
-    "UPDATE products SET qty = qty - $2, in_stock = (qty - $2) > 0 WHERE id = $1",
-    [line.id, line.qty],
-  );
-}
       send(res, 200, { id });
       return;
     }
