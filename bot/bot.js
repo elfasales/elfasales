@@ -397,21 +397,12 @@ if (!Array.isArray(items)) items = [];
         num = next.rows[0].n;
         await pool.query("INSERT INTO clients (user_id, num) VALUES ($1, $2)", [String(customer.id), num]);
       }
-      const { rows } = await pool.query(
-        "SELECT items, status FROM orders WHERE user_id = $1",
-        [String(customer.id)],
-      );
-      let bought = 0;
-      let active = 0;
-      for (const order of rows) {
-        const items = Array.isArray(order.items) ? order.items : [];
-        if (order.status === "done") {
-          for (const item of items) bought += Number(item.qty) || 0;
-        } else if (!order.status || order.status === "new") {
-          active += 1;
-        }
-      }
-      send(res, 200, { code: "ELS-" + num, bought, active });
+        await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment TEXT NOT NULL DEFAULT ''");
+const { rows } = await pool.query(
+  "SELECT id, created_at, city, items, total, payment, status FROM orders WHERE user_id = $1 ORDER BY created_at DESC",
+  [String(customer.id)],
+);
+send(res, 200, { code: "ELS-" + num, orders: rows });
       return;
     }
         if (req.method === "GET" && url.pathname === "/api/clients") {
