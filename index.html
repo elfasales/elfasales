@@ -458,7 +458,7 @@ async function loadClients() {
     document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
-      if (e.target.closest("#openFilter")) document.getElementById("filterBox").classList.toggle("on");
+      if (e.target.closest("#openLiquids")) { const row = document.getElementById("brandRow"); row.classList.toggle("on"); e.target.closest("#openLiquids").classList.toggle("on", row.classList.contains("on")); }
       const brandBtn = e.target.closest("[data-brand]");
       if (brandBtn) { flavor = brandBtn.dataset.brand; draw(); }
       const formBrand = e.target.closest("[data-form-brand]");
