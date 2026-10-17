@@ -200,7 +200,7 @@ const server = createServer(async (req, res) => {
       const current = await pool.query("SELECT photo FROM products WHERE id = $1", [body.id]);
       const oldPhoto = current.rows[0] ? current.rows[0].photo : "";
       await pool.query(
-        `UPDATE products SET city=$2, name=$3, mg=$4, ml=$5, description=$6, qty=$7, in_stock=$8, photo=$9, price=$10 WHERE id=$1`,
+        `UPDATE products SET city=$2, name=$3, mg=$4, ml=$5, description=$6, qty=$7, in_stock=$8, photo=$9, price=$10, brand=$11 WHERE id=$1`,
         [
           body.id,
           body.city === "tubingen" ? "tubingen" : "reutlingen",
