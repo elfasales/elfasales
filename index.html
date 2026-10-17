@@ -80,11 +80,9 @@
     .ghost { background: transparent; color: #eef3f8; border: 1px solid #2c3e52; width: 100%; padding: 14px; margin-top: 8px; }
     .back { display: inline-block; background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 8px 14px; margin: 0 0 12px; font-size: 14px; }
     nav { position: fixed; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 4px; background: #1c1c1c; border: 0; border-radius: 999px; padding: 6px; }
-    nav button { background: transparent; color: #cfcfcf; border: 0; width: auto; flex: 0 0 46px; min-height: 46px; border-radius: 999px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0; padding: 8px; overflow: hidden; transition: flex .28s ease, background .28s ease, gap .28s ease; }
-    nav button span { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width .28s ease, opacity .2s ease; }
+    nav button { background: transparent; color: #cfcfcf; border: 0; width: 46px; flex: 0 0 46px; min-height: 46px; border-radius: 999px; display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 0; padding: 8px; overflow: hidden; white-space: nowrap; font-size: 0; transition: flex .28s ease, background .28s ease, gap .28s ease; }
     nav button svg { width: 22px; height: 22px; flex: 0 0 22px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    nav button.on { flex: 1 1 auto; gap: 6px; color: #fff; background: linear-gradient(90deg, #e85ad4, #7b3ff2); }
-    nav button.on span { max-width: 88px; opacity: 1; }
+    nav button.on { flex: 1 1 auto; gap: 8px; font-size: 14px; color: #fff; background: linear-gradient(90deg, #e85ad4, #7b3ff2); }
     input, select, textarea { width: 100%; margin: 6px 0 10px; padding: 14px; border-radius: 12px; border: 1px solid #2c3e52; background: #182433; color: inherit; font-family: inherit; font-weight: 600; font-size: 16px; }
     .row { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin: 8px 0; padding: 12px; border: 1px solid #2c3e52; border-radius: 16px; }
     .adminbrands { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 12px; }
