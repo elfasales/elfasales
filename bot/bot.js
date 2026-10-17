@@ -176,7 +176,7 @@ const server = createServer(async (req, res) => {
           Boolean(body.inStock),
           String(body.photo || ""),
           Number(body.price) || 0,
-          body.brand === "chaser" ? "chaser" : body.brand === "hqd" ? "hqd" : "elfliq",
+          ["chaser", "hqd", "vozol"].includes(body.brand) && !(body.city === "tubingen" && body.brand === "hqd") ? body.brand : "elfliq",
         ],
       );
       send(res, 200, { id });
