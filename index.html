@@ -495,7 +495,7 @@ async function loadClients() {
     const when = order.created_at ? new Date(order.created_at).toLocaleString("ru-RU") : "";
     const st = order.status || "new";
     const lines = items.map((item) => `<div class="line"><span>${item.name}</span><span>${item.qty} шт.</span></div>`).join("");
-    return `<article class="mycard"><div class="top"><strong>${order.id}</strong><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div><div class="citybar">${order.city === "tubingen" ? "Tübingen" : "Reutlingen"}</div><div class="meta"><span>${when}</span><span class="pill">${statusName[st] || "Новый"}</span></div>${lines}<div class="pay">${payName[order.payment] || "Оплата не указана"}</div></article>`;
+    return `<article class="mycard"><div class="top"><div><span class="label">Номер заказа</span><strong>${order.id}</strong></div><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div><div class="citybar">${order.city === "tubingen" ? "Tübingen" : "Reutlingen"} · ${payName[order.payment] || "Оплата не указана"}</div><div class="meta"><span>${when}</span><span class="pill">${statusName[st] || "Новый"}</span></div>${lines}</article>`;
   }).join("");
 }
 
