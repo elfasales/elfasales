@@ -326,7 +326,7 @@ const server = createServer(async (req, res) => {
       }
       await readyDb();
       await pool.query("ALTER TABLE orders ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'new'");
-      const found = await pool.query("SELECT id, user_id FROM orders WHERE id = $1", [body.id]);
+      const found = await pool.query("SELECT id, user_id, items, status FROM orders WHERE id = $1", [body.id]);
       const order = found.rows[0];
       if (!order) {
         send(res, 404, { error: "Заказ не найден" });
