@@ -482,8 +482,20 @@ async function loadClients() {
   const res = await fetch(API + "/api/my-orders", { headers: initHeader });
   const data = await res.json().catch(() => ({}));
   document.getElementById("clientNo").textContent = "Номер клиента: " + (data.code || "—");
-  document.getElementById("boughtCount").textContent = data.bought || 0;
-  document.getElementById("activeCount").textContent = data.active || 0;
+  const box = document.getElementById("myOrders");
+  const orders = Array.isArray(data.orders) ? data.orders : [];
+  if (!orders.length) { box.innerHTML = "<p class='hint'>Заказов пока нет</p>"; return; }
+  const statusName = { new: "Новый", done: "Выполнен", cancelled: "Отменён" };
+  const payName = { cash: "Наличные", bank: "Банковский перевод" };
+  box.innerHTML = orders.map((order) => {
+    let items = order.items;
+    if (typeof items === "string") { try { items = JSON.parse(items); } catch { items = []; } }
+    if (!Array.isArray(items)) items = [];
+    const when = order.created_at ? new Date(order.created_at).toLocaleString("ru-RU") : "";
+    const st = order.status || "new";
+    const lines = items.map((item) => `<div class="line"><span>${item.name}</span><span>${item.qty} шт.</span></div>`).join("");
+    return `<article class="mycard"><div class="top"><strong>${order.id}</strong><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div><div class="citybar">${order.city === "tubingen" ? "Tübingen" : "Reutlingen"}</div><div class="meta"><span>${when}</span><span class="pill">${statusName[st] || "Новый"}</span></div>${lines}<div class="pay">${payName[order.payment] || "Оплата не указана"}</div></article>`;
+  }).join("");
 }
 
     
