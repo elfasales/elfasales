@@ -45,6 +45,7 @@
     .mycard { background: #1a1a1a; border-radius: 18px; padding: 14px; margin: 0 0 12px; }
     .mycard .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
     .mycard .label { display: block; color: #b5b5b5; font-size: 12px; font-weight: 600; }
+    .mycard .right { text-align: right; }
     .mycard .sum { color: #c9a6ff; font-weight: 700; }
     .mycard .citybar { margin: 10px 0; padding: 10px 12px; border-radius: 12px; background: #7b3ff2; }
     .mycard .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: #b5b5b5; font-size: 13px; }
@@ -495,7 +496,7 @@ async function loadClients() {
     const when = order.created_at ? new Date(order.created_at).toLocaleString("ru-RU") : "";
     const st = order.status || "new";
     const lines = items.map((item) => `<div class="line"><span>${item.name}</span><span>${item.qty} шт.</span></div>`).join("");
-    return `<article class="mycard"><div class="top"><div><span class="label">Номер заказа</span><strong>${order.id}</strong></div><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div><div class="citybar">${order.city === "tubingen" ? "Tübingen" : "Reutlingen"} · ${payName[order.payment] || "Оплата не указана"}</div><div class="meta"><span>${when}</span><span class="pill">${statusName[st] || "Новый"}</span></div>${lines}</article>`;
+    return `<article class="mycard"><div class="top"><div><span class="label">Номер заказа</span><strong>${order.id}</strong></div><div class="right"><span class="label">Итого:</span><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div></div><div class="citybar">${order.city === "tubingen" ? "Tübingen" : "Reutlingen"} · ${payName[order.payment] || "Оплата не указана"}</div><div class="meta"><span>${when}</span><span class="pill">${statusName[st] || "Новый"}</span></div>${lines}</article>`;
   }).join("");
 }
 
