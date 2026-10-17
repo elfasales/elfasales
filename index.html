@@ -469,7 +469,20 @@ async function loadClients() {
     document.body.addEventListener("click", async (e) => {
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
-      if (e.target.closest("#openLiquids")) { const row = document.getElementById("brandRow"); row.classList.toggle("on"); e.target.closest("#openLiquids").classList.toggle("on", row.classList.contains("on")); }
+      const catBtn = e.target.closest("[data-cat]");
+      if (catBtn) {
+        const same = catBtn.classList.contains("on");
+        document.querySelectorAll(".cat").forEach((b) => b.classList.remove("on"));
+        const row = document.getElementById("brandRow");
+        const note = document.getElementById("soonNote");
+        const grid = document.getElementById("grid");
+        if (same) { row.classList.remove("on"); note.style.display = "none"; grid.style.display = ""; }
+        else {
+          catBtn.classList.add("on");
+          if (catBtn.dataset.cat === "liquids") { row.classList.add("on"); note.style.display = "none"; grid.style.display = ""; }
+          else { row.classList.remove("on"); grid.style.display = "none"; note.style.display = "block"; }
+        }
+      }
       const brandBtn = e.target.closest("[data-brand]");
       if (brandBtn) { flavor = brandBtn.dataset.brand; draw(); }
       const formBrand = e.target.closest("[data-form-brand]");
