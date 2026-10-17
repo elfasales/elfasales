@@ -542,6 +542,7 @@ if (edit) {
   if (!p) return;
   editing = p.id;
   adminCity = p.city;
+  adminBrand = p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol" ? p.brand : "elfliq";
   photo = "";
   document.getElementById("pName").value = p.name;
   document.getElementById("pMg").value = p.mg;
