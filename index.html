@@ -254,7 +254,11 @@
       document.getElementById("grid").innerHTML = list.length
         ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<div class="pad"><strong>${p.name}</strong><span class="price">${Number(p.price).toFixed(2)} EUR</span><span class="stockline">${p.in_stock && Number(p.qty) > 0 ? "В наличии: " + p.qty : "Нет в наличии"}</span></div></article></button>`).join("")
         : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
-      const mine = products.filter((p) => p.city === adminCity);
+      if (adminCity === "tubingen" && adminBrand === "hqd") adminBrand = "elfliq";
+      const adminHqd = document.querySelector("[data-admin-brand='hqd']");
+      if (adminHqd) adminHqd.style.display = adminCity === "tubingen" ? "none" : "";
+      document.querySelectorAll("[data-admin-brand]").forEach((b) => b.classList.toggle("on", b.dataset.adminBrand === adminBrand));
+      const mine = products.filter((p) => p.city === adminCity && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === adminBrand);
       document.getElementById("adminList").innerHTML = mine.map((p) => `
         <div class="row">
           <button class="ghost" data-edit="${p.id}" style="width:auto;margin:0;padding:10px 14px;border:0">${p.name}</button>
