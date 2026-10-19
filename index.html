@@ -339,11 +339,20 @@
       const grid = document.getElementById("grid");
 grid.classList.add("flavors");
 const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === "elfliq");
+const chaser = products.filter((p) => p.city === city && p.brand === "chaser");
+const cards = [];
 if (flavor === "all" || flavor === "elfliq") {
   const any = elf.some((p) => p.in_stock && Number(p.qty) > 0);
-  const prices = elf.map((p) => Number(p.price) || 0).filter((n) => n > 0);
-const min = prices.length ? Math.min(...prices) : 0;
-grid.innerHTML = `<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>Elfliq 30ml 50mg</strong></button><div class="pcard-row"><span class="price">17.00 EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`;
+  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>Elfliq 30ml 50mg</strong></button><div class="pcard-row"><span class="price">17.00 EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
+}
+if (flavor === "all" || flavor === "chaser") {
+  const any = chaser.some((p) => p.in_stock && Number(p.qty) > 0);
+  const prices = chaser.map((p) => Number(p.price) || 0).filter((n) => n > 0);
+  const min = prices.length ? Math.min(...prices).toFixed(2) + " EUR" : "";
+  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="chaser"><img src="chaser.jpg" alt=""><strong>Chaser</strong></button><div class="pcard-row"><span class="price">${min}</span><button type="button" class="flavor-plus" data-open="chaser">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
+}
+if (cards.length) {
+  grid.innerHTML = cards.join("");
 } else {
   grid.innerHTML = list.length
     ? list.map((p) => {
