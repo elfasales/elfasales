@@ -289,6 +289,30 @@ const server = createServer(async (req, res) => {
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
         [id, String(customer.id), userName, username, body.city || "", JSON.stringify(lines), total, payment],
       );
+          const cityLabel = body.city === "tubingen" ? "Tübingen" : "Reutlingen";
+const payLabel = payment === "bank" ? "Банковский перевод" : "Наличные";
+const goods = lines.map((line) => line.name + " — " + line.qty + " шт.").join("\n");
+const who = username
+  ? "@" + username
+  : '<a href="tg://user?id=' + customer.id + '">Написать клиенту</a>';
+const note = [
+  "Новый заказ",
+  "",
+  "Номер: " + id,
+  "Город: " + cityLabel,
+  "Оплата: " + payLabel,
+  "Итого: " + Number(total).toFixed(2) + " EUR",
+  "",
+  "Клиент: " + (userName || "Без имени"),
+  who,
+  "",
+  goods,
+].join("\n");
+try {
+  await apiCall("sendMessage", { chat_id: ADMIN_ID, text: note, parse_mode: "HTML" });
+} catch (err) {
+  console.log("Уведомление:", err instanceof Error ? err.message : err);
+}
       send(res, 200, { id });
       return;
     }
