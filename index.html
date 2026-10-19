@@ -355,8 +355,8 @@ if (orderNote && !rows.length) {
   const lines = rows.map(([id, qty]) => {
     const p = products.find((x) => x.id === id);
     if (!p) return "";
-    total += Number(p.price) * qty;
-    return `<div class="qline"><strong>${p.name}</strong><div class="qtyrow"><button type="button" data-minus="${p.id}">−</button><span>${qty}</span><button type="button" data-plus="${p.id}">+</button></div><span class="price">${(Number(p.price) * qty).toFixed(2)} EUR</span></div>`;
+    total += (Number(p.price) || 17) * qty;
+    return `<div class="qline"><strong>${p.name}</strong><div class="qtyrow"><button type="button" data-minus="${p.id}">−</button><span>${qty}</span><button type="button" data-plus="${p.id}">+</button></div><span class="price">${((Number(p.price) || 17) * qty).toFixed(2)} EUR</span></div>`;
   }).join("");
   box.innerHTML = `<div class="cline">${lines}</div>
     <p class="price">Итого: ${total.toFixed(2)} EUR</p>
