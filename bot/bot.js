@@ -152,9 +152,9 @@ const server = createServer(async (req, res) => {
       }
       const body = await readBody(req);
       const name = String(body.name || "").trim();
-      const ml = Number(body.ml);
-      const mg = Number(body.mg);
-      const qty = Number(body.qty);
+      const ml = Number(body.ml) || 0;
+      const mg = Number(body.mg) || 0;
+      const qty = Number(body.qty) || 0;
       const price = Number(body.price || 0);
       if (!name || !ml || !Number.isFinite(mg)) {
         send(res, 400, { error: "Заполни название, крепость и миллилитры" });
