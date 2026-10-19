@@ -375,7 +375,8 @@ if (opened === "elfliq") {
   const controls = qty
     ? `<span class="step"><button type="button" data-minus="${p.id}">−</button><span>${qty}</span><button type="button" class="plusb" data-plus="${p.id}">+</button></span>`
     : `<button class="buy" id="addCart" ${can ? "" : "disabled"}>${can ? "Добавить в корзину" : "Нет в наличии"}</button>`;
-  document.getElementById("detailBox").innerHTML = `<div class="shot">${p && p.photo ? pic(p) : `<img src="elfliq.jpg" alt="">`}</div><h1>ELFLIQ</h1><p class="stock-ok">В наличии</p><div class="chips">${chips}</div><div class="buyrow"><span class="price">${p ? Number(p.price).toFixed(2) : "0.00"} EUR</span>${controls}</div>`;
+  const shot = p && p.photo ? pic(p) : '<img src="elfliq.jpg" alt="">';
+  document.getElementById("detailBox").innerHTML = `<div class="shot">${shot}</div><h1>ELFLIQ</h1><p class="stock-ok">В наличии</p><div class="chips">${chips}</div><div class="buyrow"><span class="price">${p ? Number(p.price).toFixed(2) : "0.00"} EUR</span>${controls}</div>`;
   const add = document.getElementById("addCart");
   if (add && can) add.onclick = () => { cart[p.id] = 1; draw(); };
   return;
