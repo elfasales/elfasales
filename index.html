@@ -406,7 +406,7 @@ if (opened === "elfliq" || opened === "chaser") {
   const shot = p && p.photo ? pic(p) : '<img src="' + (opened === "chaser" ? "chaser.jpg" : "elfliq.jpg") + '" alt="">';
   const cartCount = Object.values(cart).reduce((sum, n) => sum + Number(n), 0);
   const bar = cartCount ? `<button type="button" class="cartgo" data-tab="cart">Корзина · ${cartCount}</button>` : "";
-  document.getElementById("detailBox").innerHTML = `<div class="shot">${shot}</div><h1>Elfliq 30ml 50mg</h1><p class="stock-ok">В наличии</p><div class="chips">${chips}</div><div class="buyrow"><span class="price">${(17 * (qty || 1)).toFixed(2)} EUR</span>${controls}</div>${bar}`;
+  document.getElementById("detailBox").innerHTML = `<div class="shot">${shot}</div><h1>${opened === "chaser" ? "Chaser" : "Elfliq 30ml 50mg"}</h1><p class="stock-ok">В наличии</p><div class="chips">${chips}</div><div class="buyrow"><span class="price">${(17 * (qty || 1)).toFixed(2)} EUR</span>${controls}</div>${bar}`;
   const add = document.getElementById("addCart");
   if (add && can) add.onclick = () => { cart[p.id] = 1; draw(); };
   return;
