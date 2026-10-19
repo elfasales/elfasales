@@ -192,10 +192,10 @@ const server = createServer(async (req, res) => {
       const ml = Number(body.ml) || 0;
       const mg = Number(body.mg) || 0;
       const qty = Number(body.qty) || 0;
-      if (!body.id || !name || !ml || !Number.isFinite(mg)) {
-        send(res, 400, { error: "Заполни название, крепость и миллилитры" });
-        return;
-      }
+      if (!name) {
+  send(res, 400, { error: "Напиши название" });
+  return;
+}
       await readyDb();
       const current = await pool.query("SELECT photo FROM products WHERE id = $1", [body.id]);
       const oldPhoto = current.rows[0] ? current.rows[0].photo : "";
