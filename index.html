@@ -117,8 +117,9 @@
     .flavor-plus:disabled { color: #555; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
     .chip { border: 0; border-radius: 999px; background: #2a2a2a; color: #fff; padding: 8px 12px; font-size: 13px; }
-    .chip.on { background: #7b3ff2; }
-    .chip b { color: #3dde6a; font-weight: 700; }
+    .chip.on { background: #343434; }
+    .chip b { color: #c6f135; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; margin-left: 6px; }
+    .chip svg { width: 12px; height: 12px; stroke: #c6f135; fill: none; stroke-width: 2; }
     .buyrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .buyrow .buy { width: auto; margin: 0; flex: 1; }
     .step { display: flex; align-items: center; gap: 8px; }
@@ -395,7 +396,7 @@ if (orderNote && !rows.length) {
 if (opened === "elfliq" || opened === "chaser") {
   const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === opened);
   if (!picked || !elf.some((p) => p.id === picked)) picked = (elf.find((p) => p.in_stock && Number(p.qty) > 0) || elf[0] || {}).id || "";
-  const p = elf.find((x) => x.id === picked);
+  const chips = elf.map((item) => { const left = item.in_stock ? Number(item.qty) : 0; const label = left >= 80 ? "80+" : left; return `<button type="button" class="chip ${item.id === picked ? "on" : ""}" data-pick="${item.id}">${item.name} <b><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>${label}</b></button>`; }).join("");
   const chips = elf.map((item) => `<button type="button" class="chip ${item.id === picked ? "on" : ""}" data-pick="${item.id}">${item.name} <b>${item.in_stock ? item.qty : 0}</b></button>`).join("");
   const qty = p ? cart[p.id] || 0 : 0;
   const can = p && p.in_stock && Number(p.qty) > 0;
