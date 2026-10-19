@@ -318,12 +318,21 @@
       document.querySelectorAll("[data-form-brand]").forEach((b) => b.classList.toggle("on", b.dataset.formBrand === adminBrand));
       const grid = document.getElementById("grid");
 grid.classList.add("flavors");
-grid.innerHTML = list.length
-  ? list.map((p) => {
-      const can = p.in_stock && Number(p.qty) > 0;
-      return `<article class="pcard"><button type="button" class="pcard-open" data-open="${p.id}">${pic(p)}<strong>${p.name}</strong></button><div class="pcard-row"><span class="price">${Number(p.price).toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-add="${p.id}" ${can ? "" : "disabled"}>+</button></div><span class="${can ? "stock-ok" : "stock-no"}">${can ? "В наличии: " + p.qty : "Нет в наличии"}</span></article>`;
-    }).join("")
-  : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
+const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === "elfliq");
+if (flavor === "all" || flavor === "elfliq") {
+  const any = elf.some((p) => p.in_stock && Number(p.qty) > 0);
+  const min = elf.length ? Math.min(...elf.map((p) => Number(p.price) || 0)) : 0;
+  grid.innerHTML = elf.length
+    ? `<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>ELFLIQ</strong></button><div class="pcard-row"><span class="price">${min.toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет в наличии"}</span></article>`
+    : "<p class='hint'>В этом бренде пока пусто.</p>";
+} else {
+  grid.innerHTML = list.length
+    ? list.map((p) => {
+        const can = p.in_stock && Number(p.qty) > 0;
+        return `<article class="pcard"><button type="button" class="pcard-open" data-open="${p.id}">${pic(p)}<strong>${p.name}</strong></button><div class="pcard-row"><span class="price">${Number(p.price).toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-add="${p.id}" ${can ? "" : "disabled"}>+</button></div><span class="${can ? "stock-ok" : "stock-no"}">${can ? "В наличии: " + p.qty : "Нет в наличии"}</span></article>`;
+      }).join("")
+    : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
+}
       if (adminCity === "tubingen" && adminBrand === "hqd") adminBrand = "elfliq";
       const adminHqd = document.querySelector("[data-admin-brand='hqd']");
       if (adminHqd) adminHqd.style.display = adminCity === "tubingen" ? "none" : "";
