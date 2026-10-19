@@ -155,7 +155,7 @@ const server = createServer(async (req, res) => {
       const ml = Number(body.ml) || 0;
       const mg = Number(body.mg) || 0;
       const qty = Number(body.qty) || 0;
-      const price = Number(body.price || 0);
+      const price = Number(body.price || 17);
       if (!name) {
   send(res, 400, { error: "Напиши название" });
   return;
@@ -175,7 +175,7 @@ const server = createServer(async (req, res) => {
           Number.isFinite(qty) ? qty : 0,
           Boolean(body.inStock),
           String(body.photo || ""),
-          Number(body.price) || 0,
+          Number(body.price) || 17,
           ["chaser", "hqd", "vozol"].includes(body.brand) && !(body.city === "tubingen" && body.brand === "hqd") ? body.brand : "elfliq",
         ],
       );
