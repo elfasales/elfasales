@@ -268,7 +268,7 @@ const server = createServer(async (req, res) => {
       for (const raw of body.items || []) {
         const qty = Number(raw.qty);
         if (!qty) continue;
-        const found = await pool.query("SELECT id, name, price, qty FROM products WHERE id = $1", [raw.id]);
+        const found = await pool.query("SELECT id, name, price, qty, brand FROM products WHERE id = $1", [raw.id]);
         const product = found.rows[0];
         if (!product || Number(product.qty) < qty) {
           send(res, 400, { error: "Не хватает: " + (product ? product.name : "товар") });
