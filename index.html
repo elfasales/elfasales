@@ -307,9 +307,16 @@
       const list = products.filter((p) => p.city === city && (flavor === "all" || p.brand === flavor) && !(city === "tubingen" && p.brand === "hqd"));
       document.querySelectorAll("[data-brand]").forEach((b) => b.classList.toggle("on", b.dataset.brand === flavor));
       document.querySelectorAll("[data-form-brand]").forEach((b) => b.classList.toggle("on", b.dataset.formBrand === adminBrand));
-      document.getElementById("grid").innerHTML = list.length
-        ? list.map((p) => `<button class="card" data-open="${p.id}"><article>${pic(p)}<div class="pad"><strong>${p.name}</strong><span class="price">${Number(p.price).toFixed(2)} EUR</span><span class="stockline">${p.in_stock && Number(p.qty) > 0 ? "В наличии: " + p.qty : "Нет в наличии"}</span></div></article></button>`).join("")
-        : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
+      const grid = document.getElementById("grid");
+grid.classList.toggle("flavors", flavor !== "all");
+grid.innerHTML = flavor === "all"
+  ? ""
+  : list.length
+    ? list.map((p) => {
+        const can = p.in_stock && Number(p.qty) > 0;
+        return `<div class="flavor"><button type="button" class="flavor-open" data-open="${p.id}">${pic(p)}<span><strong>${p.name}</strong><span class="price">${Number(p.price).toFixed(2)} EUR</span><span class="stockline">${can ? "В наличии: " + p.qty : "Нет в наличии"}</span></span></button><button type="button" class="flavor-plus" data-add="${p.id}" ${can ? "" : "disabled"}>+</button></div>`;
+      }).join("")
+    : "<p class='hint'>В этом бренде пока пусто.</p>";
       if (adminCity === "tubingen" && adminBrand === "hqd") adminBrand = "elfliq";
       const adminHqd = document.querySelector("[data-admin-brand='hqd']");
       if (adminHqd) adminHqd.style.display = adminCity === "tubingen" ? "none" : "";
