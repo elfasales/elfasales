@@ -85,17 +85,16 @@
     .cats { display: flex; gap: 16px; margin: 0 0 16px; }
     .brands { display: none; gap: 8px; overflow-x: auto; margin: 0 0 16px; }
     .brands.on { display: flex; }
-    .brands.on { flex-direction: column; }
-    .brandpills { display: flex; gap: 8px; overflow-x: auto; }
-    .brandcard { display: block; width: 100%; padding: 0; border: 0; border-radius: 18px; overflow: hidden; background: #111; }
-    .brandcard img { width: 100%; height: 220px; object-fit: cover; object-position: center; display: block; }
-    .brandcard.on { box-shadow: 0 0 0 2px #c9a6ff; }
-    #grid.flavors { display: flex; flex-direction: column; }
-    .flavor { display: flex; align-items: center; gap: 10px; background: #1a1a1a; border-radius: 18px; padding: 10px; }
-    .flavor-open { display: flex; align-items: center; gap: 10px; flex: 1; background: transparent; color: #fff; border: 0; text-align: left; padding: 0; }
-    .flavor-open img { width: 72px; height: 72px; object-fit: cover; border-radius: 12px; }
-    .flavor-plus { width: 36px; height: 36px; border-radius: 50%; border: 0; background: #7b3ff2; color: #fff; font-size: 22px; }
-    .flavor-plus:disabled { background: #2a2a2a; color: #777; }
+    .pcard { background: #161616; border-radius: 22px; padding: 16px; }
+    .pcard-open { display: block; width: 100%; background: transparent; border: 0; color: #fff; padding: 0; text-align: left; }
+    .pcard-open img { width: 140px; height: 170px; object-fit: contain; display: block; margin: 0 auto 12px; background: transparent; }
+    .pcard-open strong { display: block; font-size: 18px; }
+    .pcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+    .pcard .price { margin: 0; font-size: 22px; font-weight: 700; color: #fff; }
+    .stock-ok { display: block; margin-top: 8px; color: #3dde6a; font-size: 14px; }
+    .stock-no { display: block; margin-top: 8px; color: #ffb4c0; font-size: 14px; }
+    .flavor-plus { width: 40px; height: 40px; border: 0; background: transparent; color: #fff; font-size: 28px; padding: 0; }
+    .flavor-plus:disabled { color: #555; }
     .cat { width: 96px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: transparent; border: 0; color: #d7deea; font-size: 13px; padding: 0; border-radius: 0; line-height: 1.15; text-align: center; }
     .cat .round { width: 84px; height: 84px; border-radius: 50%; background: #161222; box-shadow: 0 0 16px rgba(140, 70, 255, .65); overflow:hidden; }
     .cat .round img { width: 100%; height: 100%; object-fit: cover; display: block; }
