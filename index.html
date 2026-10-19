@@ -87,7 +87,8 @@
     .brands.on { display: flex; }
     .pcard { background: #161616; border-radius: 22px; padding: 16px; }
     .pcard-open { display: block; width: 100%; background: transparent; border: 0; color: #fff; padding: 0; text-align: left; }
-    .pcard-open img { width: 140px; height: 170px; object-fit: contain; display: block; margin: 0 auto 12px; background: transparent; }
+    .pcard-open img, .shot img { width: 100%; height: auto; max-height: none; object-fit: contain; display: block; margin: 0 auto 12px; background: transparent; }
+    #pPhoto, #pMg, #pMl, #pPrice, #pText, #pQty, #pStock { display: none; }
     .pcard-open strong { display: block; font-size: 18px; }
     .pcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
     .pcard .price { margin: 0; font-size: 22px; font-weight: 700; color: #fff; }
