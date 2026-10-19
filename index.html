@@ -393,7 +393,7 @@ if (orderNote && !rows.length) {
     <button type="button" class="buy" id="checkout">Оформить заказ</button>`;
 }
       if (!opened) return;
-if (opened === "elfliq") {
+if (opened === "elfliq" || opened === "chaser") {
   const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === "elfliq");
   if (!picked || !elf.some((p) => p.id === picked)) picked = (elf.find((p) => p.in_stock && Number(p.qty) > 0) || elf[0] || {}).id || "";
   const p = elf.find((x) => x.id === picked);
