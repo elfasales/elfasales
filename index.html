@@ -94,7 +94,11 @@
     .pcard .price { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
     article.pcard { background: transparent; min-height: 0; border: 0; }
     .pcard { background: #141414; border: 0; box-shadow: none; }
-    .pcard-open img { width: 62%; max-width: 210px; border-radius: 0; }
+    .grid.flavors { grid-template-columns: 1fr; }
+    .pcard { padding: 0 0 14px; overflow: hidden; }
+    .pcard-open img { width: 100%; max-width: none; height: auto; margin: 0; border-radius: 22px 22px 0 0; background: transparent; }
+    .pcard-open strong { height: auto; padding: 14px 16px 0; }
+    .pcard-row, .pcard .stock-ok, .pcard .stock-no { margin-left: 16px; margin-right: 16px; }
     #detail.screen { display: block; position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.55); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
     #detail.screen.on { opacity: 1; pointer-events: auto; }
     #detail .back { position: absolute; top: 14px; left: 14px; z-index: 2; }
