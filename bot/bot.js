@@ -175,7 +175,7 @@ const server = createServer(async (req, res) => {
           Number.isFinite(qty) ? qty : 0,
           Boolean(body.inStock),
           String(body.photo || ""),
-          Number(body.price) || 17,
+          Number(body.price) || (body.brand === "chaser" ? 20 : 17)
           ["chaser", "hqd", "vozol"].includes(body.brand) && !(body.city === "tubingen" && body.brand === "hqd") ? body.brand : "elfliq",
         ],
       );
@@ -274,8 +274,9 @@ const server = createServer(async (req, res) => {
           send(res, 400, { error: "Не хватает: " + (product ? product.name : "товар") });
           return;
         }
-        lines.push({ id: product.id, name: product.name, qty, price: Number(product.price) });
-        total += Number(product.price) * qty;
+        const unit = Number(product.price) || (product.brand === "chaser" ? 20 : 17);
+lines.push({ id: product.id, name: product.name, qty, price: unit });
+total += unit * qty;
       }
       if (!lines.length) {
         send(res, 400, { error: "Корзина пустая" });
