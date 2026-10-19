@@ -397,6 +397,7 @@ if (add && can) add.onclick = () => {
   cart[p.id] = (cart[p.id] || 0) + 1;
   draw();
 };
+      }
 
     function show(id) {
       document.querySelectorAll("main > .screen, main section.screen").forEach((s) => s.classList.toggle("on", s.id === id));
