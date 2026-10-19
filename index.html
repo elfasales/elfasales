@@ -91,7 +91,21 @@
     #pPhoto, #pMg, #pMl, #pPrice, #pText { display: none; }
     .pcard-open strong { display: block; font-size: 18px; }
     .pcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
-    .pcard .price { margin: 0; font-size: 22px; font-weight: 700; color: #fff; }
+    .pcard .price { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+    article.pcard { background: transparent; min-height: 0; border: 0; }
+    .pcard { background: #141414; border: 0; box-shadow: none; }
+    .pcard-open img { width: 62%; max-width: 210px; border-radius: 0; }
+    #detail.screen { display: block; position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.55); opacity: 0; pointer-events: none; transition: opacity .25s ease; }
+    #detail.screen.on { opacity: 1; pointer-events: auto; }
+    #detail .back { position: absolute; top: 14px; left: 14px; z-index: 2; }
+    #detailBox { position: absolute; left: 0; right: 0; bottom: 0; max-height: 92vh; overflow: auto; background: #141414; border-radius: 24px 24px 0 0; padding: 18px 16px 28px; transform: translateY(110%); transition: transform .35s ease; }
+    #detail.screen.on #detailBox { transform: none; }
+    #detail h1 { font-size: 20px; }
+    #detail .shot, #detail .shot img { background: transparent; border: 0; }
+    #detail .shot img { width: 62%; max-width: 220px; height: auto; margin: 8px auto; }
+    #detail .buyrow { display: block; }
+    #detail .buyrow .price { font-size: 20px; margin: 0 0 14px; }
+    #detail .buyrow .buy { width: 100%; margin: 0; border-radius: 18px; background: #7b3ff2; color: #fff; padding: 16px; }
     .stock-ok { display: block; margin-top: 8px; color: #3dde6a; font-size: 14px; }
     .stock-no { display: block; margin-top: 8px; color: #ffb4c0; font-size: 14px; }
     .flavor-plus { width: 40px; height: 40px; border: 0; background: transparent; color: #fff; font-size: 28px; padding: 0; }
