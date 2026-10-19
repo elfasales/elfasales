@@ -595,6 +595,8 @@ async function loadClients() {
       if (adminCityBtn) { adminCity = adminCityBtn.dataset.adminCity; draw(); }
       const sectionBtn = e.target.closest("[data-admin-brand]");
       if (sectionBtn) { adminBrand = sectionBtn.dataset.adminBrand; draw(); }
+      const pick = e.target.closest("[data-pick]");
+      if (pick) { picked = pick.dataset.pick; opened = "elfliq"; draw(); }
       const addOne = e.target.closest("[data-add]");
 if (addOne) {
   const id = addOne.dataset.add;
