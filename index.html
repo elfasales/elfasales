@@ -185,7 +185,6 @@
       <div class="grid" id="grid"></div>
     </section>
     <section id="detail" class="screen">
-      <button class="back" type="button" data-tab="catalog">Назад</button>
       <div id="detailBox"></div>
     </section>
     <section id="cart" class="screen">
@@ -639,6 +638,7 @@ if (addOne) {
 }
       const open = e.target.closest("[data-open]");
       if (open) { opened = open.dataset.open; draw(); show("detail"); }
+      if (e.target.id === "detail") { opened = ""; show("catalog"); }
       const tab = e.target.closest("[data-tab]");
       if (tab) { show(tab.dataset.tab); if (tab.dataset.tab === "profile") loadProfile(); }
       const adminBtn = e.target.closest("[data-admin]");
