@@ -25,9 +25,20 @@
     #adminMenu h1 { grid-column: 1 / -1; margin: 0 0 4px 0px; text-align: left; }
     #adminMenu button { aspect-ratio: 1; min-height: 0; width: 100%; font-size: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: #1a1a1a; color: #fff; border: 0; border-radius: 22px; }
     #adminMenu button svg { width: 34px; height: 34px; stroke: #c9a6ff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .orderActs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-    .orderActs .ghost { width: 100%; margin: 0; padding: 8px 6px; font-size: 14px; }
-    .orderActs .wide { grid-column: 1 / -1; }
+    .orderActs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .orderActs .ghost { width: 100%; margin: 0; padding: 10px 8px; font-size: 14px; background: #242424; color: #fff; border: 0; border-radius: 999px; }
+    .orderActs .wide { grid-column: 1 / -1; background: #3a1c24; color: #ffb4c0; }
+    #adminOrders .back { background: #1a1a1a; color: #fff; border: 0; border-radius: 999px; }
+    #adminOrders .ocard { background: #1a1a1a; border-radius: 18px; padding: 14px; margin: 0 0 12px; }
+    #adminOrders .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+    #adminOrders .label { display: block; color: #b5b5b5; font-size: 12px; font-weight: 600; }
+    #adminOrders .right { text-align: right; }
+    #adminOrders .sum { color: #c9a6ff; font-weight: 700; }
+    #adminOrders .citybar { margin: 10px 0; padding: 10px 12px; border-radius: 12px; background: #7b3ff2; }
+    #adminOrders .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: #b5b5b5; font-size: 13px; }
+    #adminOrders .who { margin: 8px 0 4px; }
+    #adminOrders .line { display: flex; justify-content: space-between; gap: 8px; padding: 8px 0 0; }
+    #adminOrders [data-status="done"] { background: #1c3328; color: #b6f5cf; }
     .city, .menu button, .plus { background: #182433; color: #eef3f8; border: 1px solid #2c3e52; padding: 18px 8px; font-size: 16px; min-height: 58px; }
     .emptycart { min-height: 52vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
     .emptycart .bubble { width: 88px; height: 88px; border-radius: 50%; background: #1c2633; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
