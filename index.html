@@ -397,7 +397,6 @@ if (opened === "elfliq" || opened === "chaser") {
   const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === opened);
   if (!picked || !elf.some((p) => p.id === picked)) picked = (elf.find((p) => p.in_stock && Number(p.qty) > 0) || elf[0] || {}).id || "";
   const chips = elf.map((item) => { const left = item.in_stock ? Number(item.qty) : 0; const label = left >= 80 ? "80+" : left; return `<button type="button" class="chip ${item.id === picked ? "on" : ""}" data-pick="${item.id}">${item.name} <b><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>${label}</b></button>`; }).join("");
-  const chips = elf.map((item) => `<button type="button" class="chip ${item.id === picked ? "on" : ""}" data-pick="${item.id}">${item.name} <b>${item.in_stock ? item.qty : 0}</b></button>`).join("");
   const qty = p ? cart[p.id] || 0 : 0;
   const can = p && p.in_stock && Number(p.qty) > 0;
   const controls = qty
