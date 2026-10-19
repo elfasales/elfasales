@@ -565,6 +565,14 @@ async function loadClients() {
       if (adminCityBtn) { adminCity = adminCityBtn.dataset.adminCity; draw(); }
       const sectionBtn = e.target.closest("[data-admin-brand]");
       if (sectionBtn) { adminBrand = sectionBtn.dataset.adminBrand; draw(); }
+      const addOne = e.target.closest("[data-add]");
+if (addOne) {
+  const id = addOne.dataset.add;
+  const item = products.find((x) => x.id === id);
+  const next = (cart[id] || 0) + 1;
+  if (item && item.in_stock && next <= Number(item.qty)) cart[id] = next;
+  draw();
+}
       const open = e.target.closest("[data-open]");
       if (open) { opened = open.dataset.open; draw(); show("detail"); }
       const tab = e.target.closest("[data-tab]");
