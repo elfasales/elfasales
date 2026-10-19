@@ -321,10 +321,9 @@ grid.classList.add("flavors");
 const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === "elfliq");
 if (flavor === "all" || flavor === "elfliq") {
   const any = elf.some((p) => p.in_stock && Number(p.qty) > 0);
-  const min = elf.length ? Math.min(...elf.map((p) => Number(p.price) || 0)) : 0;
-  grid.innerHTML = elf.length
-    ? `<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>ELFLIQ</strong></button><div class="pcard-row"><span class="price">${min.toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет в наличии"}</span></article>`
-    : "<p class='hint'>В этом бренде пока пусто.</p>";
+  const prices = elf.map((p) => Number(p.price) || 0).filter((n) => n > 0);
+const min = prices.length ? Math.min(...prices) : 0;
+grid.innerHTML = `<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>ELFLIQ</strong></button><div class="pcard-row"><span class="price">${min > 0 ? min.toFixed(2) + " EUR" : ""}</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`;
 } else {
   grid.innerHTML = list.length
     ? list.map((p) => {
