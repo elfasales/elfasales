@@ -349,7 +349,7 @@ if (flavor === "all" || flavor === "chaser") {
   const any = chaser.some((p) => p.in_stock && Number(p.qty) > 0);
   const prices = chaser.map((p) => Number(p.price) || 0).filter((n) => n > 0);
   const min = prices.length ? Math.min(...prices).toFixed(2) + " EUR" : "";
-  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="chaser"><img src="chaser.jpg" alt=""><strong>chaser limited edition</strong></button><div class="pcard-row"><span class="price">${min}</span><button type="button" class="flavor-plus" data-open="chaser">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
+  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="chaser"><img src="chaser.jpg" alt=""><strong>Chaser Limited Edition</strong></button><div class="pcard-row"><span class="price">${min}</span><button type="button" class="flavor-plus" data-open="chaser">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
 }
 if (cards.length) {
   grid.innerHTML = cards.join("");
