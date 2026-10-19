@@ -156,10 +156,10 @@ const server = createServer(async (req, res) => {
       const mg = Number(body.mg) || 0;
       const qty = Number(body.qty) || 0;
       const price = Number(body.price || 0);
-      if (!name || !ml || !Number.isFinite(mg)) {
-        send(res, 400, { error: "Заполни название, крепость и миллилитры" });
-        return;
-      }
+      if (!name) {
+  send(res, 400, { error: "Напиши название" });
+  return;
+}
       await readyDb();
       const id = randomUUID();
       await pool.query(
