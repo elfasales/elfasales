@@ -343,7 +343,7 @@ const chaser = products.filter((p) => p.city === city && p.brand === "chaser");
 const cards = [];
 if (flavor === "all" || flavor === "elfliq") {
   const any = elf.some((p) => p.in_stock && Number(p.qty) > 0);
-  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>Elfliq 30ml 50mg</strong></button><div class="pcard-row"><span class="price">17.00 EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
+  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>ElfLiq 30ML 50MG</strong></button><div class="pcard-row"><span class="price">17.00 EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
 }
 if (flavor === "all" || flavor === "chaser") {
   const any = chaser.some((p) => p.in_stock && Number(p.qty) > 0);
