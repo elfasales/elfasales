@@ -88,7 +88,6 @@
     .pcard { background: #161616; border-radius: 22px; padding: 16px; }
     .pcard-open { display: block; width: 100%; background: transparent; border: 0; color: #fff; padding: 0; text-align: left; }
     .pcard-open img, .shot img { width: 100%; height: auto; max-height: none; object-fit: contain; display: block; margin: 0 auto 12px; background: transparent; }
-    #pPhoto, #pMg, #pMl, #pPrice, #pText { display: none; }
     .pcard-open strong { display: block; font-size: 18px; }
     .pcard-row { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
     .pcard .price { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
@@ -113,7 +112,6 @@
     .stock-ok { display: block; margin-top: 8px; color: #3dde6a; font-size: 14px; }
     .stock-no { display: block; margin-top: 8px; color: #ffb4c0; font-size: 14px; }
     .flavor-plus { width: 40px; height: 40px; border: 0; background: transparent; color: #fff; font-size: 28px; padding: 0; }
-    #pPhoto, #pMg, #pMl, #pPrice, #pText { display: none; }
     .flavor-plus:disabled { color: #555; }
     .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 16px; }
     .chip { border: 0; border-radius: 999px; background: #2a2a2a; color: #8f8f8f; padding: 8px 12px; font-size: 13px; }
@@ -338,29 +336,12 @@
       document.querySelectorAll("[data-form-brand]").forEach((b) => b.classList.toggle("on", b.dataset.formBrand === adminBrand));
       const grid = document.getElementById("grid");
 grid.classList.add("flavors");
-const elf = products.filter((p) => p.city === city && ((p.brand === "chaser" || p.brand === "hqd" || p.brand === "vozol") ? p.brand : "elfliq") === "elfliq");
-const chaser = products.filter((p) => p.city === city && p.brand === "chaser");
-const cards = [];
-if (flavor === "all" || flavor === "elfliq") {
-  const any = elf.some((p) => p.in_stock && Number(p.qty) > 0);
-  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="elfliq"><img src="elfliq.jpg" alt=""><strong>ElfLiq 30ML 50MG</strong></button><div class="pcard-row"><span class="price">17.00 EUR</span><button type="button" class="flavor-plus" data-open="elfliq">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
-}
-if (flavor === "all" || flavor === "chaser") {
-  const any = chaser.some((p) => p.in_stock && Number(p.qty) > 0);
-  const prices = chaser.map((p) => Number(p.price) || 0).filter((n) => n > 0);
-  const min = prices.length ? Math.min(...prices).toFixed(2) + " EUR" : "";
-  cards.push(`<article class="pcard"><button type="button" class="pcard-open" data-open="chaser"><img src="chaser.jpg" alt=""><strong>Chaser Limited Edition</strong></button><div class="pcard-row"><span class="price">20.00 EUR</span><button type="button" class="flavor-plus" data-open="chaser">+</button></div><span class="${any ? "stock-ok" : "stock-no"}">${any ? "В наличии" : "Нет вкусов"}</span></article>`);
-}
-if (cards.length) {
-  grid.innerHTML = cards.join("");
-} else {
-  grid.innerHTML = list.length
-    ? list.map((p) => {
-        const can = p.in_stock && Number(p.qty) > 0;
-        return `<article class="pcard"><button type="button" class="pcard-open" data-open="${p.id}">${pic(p)}<strong>${p.name}</strong></button><div class="pcard-row"><span class="price">${Number(p.price).toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-add="${p.id}" ${can ? "" : "disabled"}>+</button></div><span class="${can ? "stock-ok" : "stock-no"}">${can ? "В наличии: " + p.qty : "Нет в наличии"}</span></article>`;
-      }).join("")
-    : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
-}
+grid.innerHTML = list.length
+  ? list.map((p) => {
+      const can = p.in_stock && Number(p.qty) > 0;
+      return `<article class="pcard"><button type="button" class="pcard-open" data-open="${p.id}">${pic(p)}<strong>${p.name}</strong></button><div class="pcard-row"><span class="price">${Number(p.price).toFixed(2)} EUR</span><button type="button" class="flavor-plus" data-add="${p.id}" ${can ? "" : "disabled"}>+</button></div><span class="${can ? "stock-ok" : "stock-no"}">${can ? "В наличии: " + p.qty : "Нет в наличии"}</span></article>`;
+    }).join("")
+  : "<p class='hint'>Нет жидкостей с таким фильтром.</p>";
       if (adminCity === "tubingen" && adminBrand === "hqd") adminBrand = "elfliq";
       const adminHqd = document.querySelector("[data-admin-brand='hqd']");
       if (adminHqd) adminHqd.style.display = adminCity === "tubingen" ? "none" : "";
