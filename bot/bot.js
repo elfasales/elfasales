@@ -175,7 +175,7 @@ const server = createServer(async (req, res) => {
           Number.isFinite(qty) ? qty : 0,
           Boolean(body.inStock),
           String(body.photo || ""),
-          Number(body.price) || (body.brand === "chaser" ? 20 : 17)
+          Number(body.price) || 0,
           ["chaser", "hqd", "vozol"].includes(body.brand) && !(body.city === "tubingen" && body.brand === "hqd") ? body.brand : "elfliq",
         ],
       );
