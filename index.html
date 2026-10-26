@@ -257,6 +257,10 @@
       </div>
       <div id="adminOrders" class="screen">
   <button class="back" type="button" data-admin="menu">Назад</button>
+        <div class="cities">
+  <button type="button" class="city on" data-order-city="reutlingen">Reutlingen</button>
+  <button type="button" class="city" data-order-city="tubingen">Tübingen</button>
+</div>
   <div id="orderList"><p class="hint">Заказов пока нет.</p></div>
 </div>
       <div id="adminClients" class="screen">
@@ -300,6 +304,7 @@
     const API = "https://elfasales-production.up.railway.app";
     let products = [];
     let city = "reutlingen";
+    let orderCity = "reutlingen";
     let flavor = "all";
     let adminBrand = "elfliq";
     let adminCity = "reutlingen";
@@ -548,10 +553,15 @@ async function loadClients() {
 }
     async function loadOrders() {
   const listBox = document.getElementById("orderList");
+  document.querySelectorAll("[data-order-city]").forEach((b) => b.classList.toggle("on", b.dataset.orderCity === orderCity));
   const res = await fetch(API + "/api/orders", { headers: initHeader });
   const all = await res.json().catch(() => []);
-  const list = Array.isArray(all) ? all : [];
-  const card = (order) => {
+  const list = Array.isArray(all) ? all.filter((order) => (order.city || "reutlingen") === orderCity) : [];
+  if (!res.ok || !list.length) {
+    listBox.innerHTML = "<p class='hint'>В этом городе заказов пока нет.</p>";
+    return;
+  }
+  listBox.innerHTML = list.map((order) => {
     const items = Array.isArray(order.items) ? order.items : [];
     const pay = order.payment === "bank" ? "Банковский перевод" : "Наличные";
     const statusName = order.status === "done" ? "Выполнен" : order.status === "cancelled" ? "Отменён" : "Новый";
@@ -559,11 +569,7 @@ async function loadClients() {
     const city = order.city === "tubingen" ? "Tübingen" : "Reutlingen";
     const lines = items.map((item) => `<div class="line"><span>${item.name}</span><span>${item.qty} шт.</span></div>`).join("");
     return `<article class="ocard"><div class="top"><div><span class="label">Номер</span><strong>${order.id}</strong></div><div class="right"><span class="label">Итого</span><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div></div><div class="citybar">${city} · ${pay}</div><div class="meta"><span>${when}</span><span class="pill">${statusName}</span></div><p class="who">${order.user_name || "Клиент"}${order.username ? " · @" + order.username : ""}</p>${lines}<div class="orderActs"><button type="button" class="ghost" data-status="done" data-id="${order.id}">Выполнен</button><button type="button" class="ghost" data-status="cancelled" data-id="${order.id}">Отменён</button><button type="button" class="ghost wide" data-del-order="${order.id}">Удалить</button></div></article>`;
-  };
-  const reu = list.filter((order) => order.city !== "tubingen");
-  const tue = list.filter((order) => order.city === "tubingen");
-  const block = (title, rows) => `<h2>${title}</h2>` + (rows.length ? rows.map(card).join("") : "<p class='hint'>Заказов пока нет.</p>");
-  listBox.innerHTML = block("Reutlingen", reu) + block("Tübingen", tue);
+  }).join("");
 }
     
   async function loadProfile() {
@@ -610,6 +616,8 @@ async function loadClients() {
       if (formBrand) { adminBrand = formBrand.dataset.formBrand; draw(); }
       const adminCityBtn = e.target.closest("[data-admin-city]");
       if (adminCityBtn) { adminCity = adminCityBtn.dataset.adminCity; draw(); }
+      const orderCityBtn = e.target.closest("[data-order-city]");
+      if (orderCityBtn) { orderCity = orderCityBtn.dataset.orderCity; loadOrders(); }
       const sectionBtn = e.target.closest("[data-admin-brand]");
       if (sectionBtn) { adminBrand = sectionBtn.dataset.adminBrand; draw(); }
       const pick = e.target.closest("[data-pick]");
