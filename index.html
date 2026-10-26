@@ -29,6 +29,7 @@
     .orderActs .ghost { width: 100%; margin: 0; padding: 10px 8px; font-size: 14px; background: #242424; color: #fff; border: 0; border-radius: 999px; }
     .orderActs .wide { grid-column: 1 / -1; background: #3a1c24; color: #ffb4c0; }
     #adminOrders .back { background: #1a1a1a; color: #fff; border: 0; border-radius: 999px; }
+    #adminOrders h2 { margin: 14px 0 10px; font-size: 16px; }
     #adminOrders .ocard { background: #1a1a1a; border-radius: 18px; padding: 14px; margin: 0 0 12px; }
     #adminOrders .top { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
     #adminOrders .label { display: block; color: #b5b5b5; font-size: 12px; font-weight: 600; }
@@ -548,12 +549,9 @@ async function loadClients() {
     async function loadOrders() {
   const listBox = document.getElementById("orderList");
   const res = await fetch(API + "/api/orders", { headers: initHeader });
-  const list = await res.json().catch(() => []);
-  if (!res.ok || !Array.isArray(list) || !list.length) {
-    listBox.innerHTML = "<p class='hint'>Заказов пока нет.</p>";
-    return;
-  }
-  listBox.innerHTML = list.map((order) => {
+  const all = await res.json().catch(() => []);
+  const list = Array.isArray(all) ? all : [];
+  const card = (order) => {
     const items = Array.isArray(order.items) ? order.items : [];
     const pay = order.payment === "bank" ? "Банковский перевод" : "Наличные";
     const statusName = order.status === "done" ? "Выполнен" : order.status === "cancelled" ? "Отменён" : "Новый";
@@ -561,7 +559,11 @@ async function loadClients() {
     const city = order.city === "tubingen" ? "Tübingen" : "Reutlingen";
     const lines = items.map((item) => `<div class="line"><span>${item.name}</span><span>${item.qty} шт.</span></div>`).join("");
     return `<article class="ocard"><div class="top"><div><span class="label">Номер</span><strong>${order.id}</strong></div><div class="right"><span class="label">Итого</span><span class="sum">${Number(order.total).toFixed(2)} EUR</span></div></div><div class="citybar">${city} · ${pay}</div><div class="meta"><span>${when}</span><span class="pill">${statusName}</span></div><p class="who">${order.user_name || "Клиент"}${order.username ? " · @" + order.username : ""}</p>${lines}<div class="orderActs"><button type="button" class="ghost" data-status="done" data-id="${order.id}">Выполнен</button><button type="button" class="ghost" data-status="cancelled" data-id="${order.id}">Отменён</button><button type="button" class="ghost wide" data-del-order="${order.id}">Удалить</button></div></article>`;
-  }).join("");
+  };
+  const reu = list.filter((order) => order.city !== "tubingen");
+  const tue = list.filter((order) => order.city === "tubingen");
+  const block = (title, rows) => `<h2>${title}</h2>` + (rows.length ? rows.map(card).join("") : "<p class='hint'>Заказов пока нет.</p>");
+  listBox.innerHTML = block("Reutlingen", reu) + block("Tübingen", tue);
 }
     
   async function loadProfile() {
