@@ -397,17 +397,16 @@ if (orderNote && !rows.length) {
 }
       if (!opened) return;
       if (opened === "ad") {
-  document.getElementById("detailBox").innerHTML = `<img class="ad-photo" src="comfort-post.jpg" alt="Comfort Travel">
-🇺🇦 Украина 🇩🇪 Германия
-
-Комфортная поездка — комфортная цена!
-
-✨ Пассажирские перевозки между Украиной и Германией.
-🛣 Комфорт в дороге.
-🤝 Надёжность и удобство в каждой поездке.
-
-COMFORT TRAVEL — ваш комфорт в каждой поездке!
-<a class="ad-link" href="https://t.me/+CdHqQGHYbV0wYzcy">https://t.me/+CdHqQGHYbV0wYzcy</a></div>`;
+  document.getElementById("detailBox").innerHTML = `
+    <img class="ad-photo" src="comfort-post.jpg" alt="Comfort Travel">
+    <div class="ad-post">
+      <p>🚐 COMFORT TRAVEL</p>
+      <p>🇺🇦 Украина 🇩🇪 Германия</p>
+      <p>Комфортная поездка — комфортная цена!</p>
+      <p>✨ Пассажирские перевозки между Украиной и Германией.<br>🛣 Комфорт в дороге.<br>🤝 Надёжность и удобство в каждой поездке.</p>
+      <p>COMFORT TRAVEL — ваш комфорт в каждой поездке!</p>
+      <p><a class="ad-link" href="https://t.me/+CdHqQGHYbV0wYzcy">https://t.me/+CdHqQGHYbV0wYzcy</a></p>
+    </div>`;
   return;
 }
 if (opened === "elfliq" || opened === "chaser") {
