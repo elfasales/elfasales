@@ -621,6 +621,14 @@ async function loadClients() {
 
     
     document.body.addEventListener("click", async (e) => {
+      const adLink = e.target.closest(".ad-link");
+if (adLink) {
+  e.preventDefault();
+  const url = "https://t.me/+CdHqQGHYbV0wYzcy";
+  if (window.Telegram && Telegram.WebApp && Telegram.WebApp.openTelegramLink) Telegram.WebApp.openTelegramLink(url);
+  else window.open(url, "_blank");
+  return;
+}
       const cityBtn = e.target.closest("[data-city]");
       if (cityBtn) { city = cityBtn.dataset.city; draw(); }
       const catBtn = e.target.closest("[data-cat]");
